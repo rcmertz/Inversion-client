@@ -1,5 +1,5 @@
 import { AbstractEntity } from "./abstract-entity";
-import { TipoPapel } from "./tipo-papel";
+import { TipoPapel } from "./tipoPapel";
 
 export class Papel extends AbstractEntity {
   data!: string;

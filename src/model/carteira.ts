@@ -2,8 +2,8 @@ import { AbstractEntity } from "./abstract-entity";
 
 export class Carteira extends AbstractEntity {
   descricao!: string;
-  tipo!: string;
   valor!: number;
+  tipo!: string;
 
   constructor() {
     super();
