@@ -13,16 +13,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../views/HomeView.vue"),
   },
 
-  {
-    path: "/produto-list",
-    name: "produto-list",
-    component: () => import("../views/carteira/carteira-list.vue"),
-  },
-  {
-    path: "/produto-cadastro",
-    name: "produto-cadastro",
-    component: () => import("../views/produto/produto-cadastro.vue"),
-  },
 ];
 
 const router = createRouter({

@@ -5,8 +5,7 @@ export class Usuario extends AbstractEntity {
   cpf!: string;
   telefone!: string;
   email!: string;
-  senha!: string;
-
+  
   constructor() {
     super();
     this.ativo = true;
