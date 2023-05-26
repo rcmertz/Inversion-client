@@ -1,43 +1,57 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App" />
-  <h1>test</h1>
-  <router-link to="/home">Go to Foo</router-link>
-
-  <router-view>
-  </router-view>
+  <SidebarComponent></SidebarComponent>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<script lang="ts">
+
+  import SidebarComponent from './components/SidebarComponent.vue'
+  export default{
+    components:{
+      SidebarComponent
+    }
+  }
+</script>
+
+<style lang="scss">
+:root {
+	--primary: #4ade80;
+	--primary-alt: #22c55e;
+	--grey: #64748b;
+	--dark: #1e293b;
+	--dark-alt: #334155;
+	--light: #f1f5f9;
+	--sidebar-width: 300px;
 }
 
-@import "~bulma/bulma.sass";
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Fira sans', sans-serif;
+}
 
 body {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  font-family: "Nunito", sans-serif;
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
+	background: var(--light);
 }
 
-body::-webkit-scrollbar {
-  display: none;
+button {
+	cursor: pointer;
+	appearance: none;
+	border: none;
+	outline: none;
+	background: none;
 }
 
-.background {
-  background-color: #eaeaea;
-  width: 100vw;
-  height: 100%;
-  overflow: hidden;
+.app {
+	display: flex;
+
+	main {
+		flex: 1 1 0;
+		padding: 2rem;
+
+		@media (max-width: 1024px) {
+			padding-left: 6rem;
+		}
+	}
 }
 </style>
