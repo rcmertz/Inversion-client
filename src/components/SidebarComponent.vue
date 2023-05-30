@@ -9,25 +9,23 @@
 
 		<h3>| INVERSION</h3>
 		<div class="menu">
-			<router-link to="/" class="button">
-				<img src="../imagens/home.png"/>
+			<router-link to="/home" class="button">
+				<img src="../imagens/home.png" />
 				<span class="text">Dashboard</span>
 			</router-link>
-			<router-link to="/about" class="button">
-				<img src="../imagens/dinheiro.png"/>
+			<router-link to="/" class="button">
+				<img src="../imagens/dinheiro.png" />
 				<span class="text">Investimentos</span>
 			</router-link>
-			<router-link to="/team" class="button">
-				<img src="../imagens/dineirin.png"/>
+			<router-link to="/carteira" class="button">
+				<img src="../imagens/dineirin.png" />
 				<span class="text">Carteira</span>
 			</router-link>
 		</div>
 
-		<div class="flex"></div>
-		
 		<div class="menu">
 			<router-link to="/settings" class="button">
-				<img src="../imagens/sair.png"/>
+				<img src="../imagens/sair.png" />
 			</router-link>
 		</div>
 	</aside>
@@ -60,10 +58,6 @@ aside {
 
 	transition: 0.2s ease-in-out;
 
-	.flex {
-		flex: 1 1 0%;
-	}
-
 	.logo {
 		margin-bottom: 1rem;
 
@@ -75,20 +69,20 @@ aside {
 	.menu-toggle-wrap {
 		display: flex;
 		justify-content: flex-end;
-		margin-bottom: 1rem;
 
 		position: relative;
 		top: 0;
-		transition: 0.2s ease-in-out;
+		transition: 0.01s ease-in-out;
 
 		.menu-toggle {
-			transition: 0.2s ease-in-out;
+			transition: 0.01s ease-in-out;
+
 			.material-icons {
 				font-size: 2rem;
 				color: var(--light);
 				transition: 0.2s ease-out;
 			}
-			
+
 			&:hover {
 				.material-icons {
 					color: var(--primary);
@@ -98,7 +92,8 @@ aside {
 		}
 	}
 
-	h3, .button .text {
+	h3,
+	.button .text {
 		opacity: 0;
 		transition: opacity 0.3s ease-in-out;
 	}
@@ -111,7 +106,8 @@ aside {
 	}
 
 	.menu {
-		margin: 0 -1rem;
+		margin: 16px;
+		width: 90%;
 
 		.button {
 			display: flex;
@@ -119,13 +115,14 @@ aside {
 			text-decoration: none;
 
 			transition: 0.2s ease-in-out;
-			padding: 0.5rem 1rem;
+			padding: 0;
 
 			.material-icons {
 				font-size: 2rem;
 				color: var(--light);
 				transition: 0.2s ease-in-out;
 			}
+
 			.text {
 				color: var(--light);
 				transition: 0.2s ease-in-out;
@@ -134,7 +131,8 @@ aside {
 			&:hover {
 				background-color: var(--dark-alt);
 
-				.material-icons, .text {
+				.material-icons,
+				.text {
 					color: var(--primary);
 				}
 			}
@@ -143,7 +141,8 @@ aside {
 				background-color: var(--dark-alt);
 				border-right: 5px solid var(--primary);
 
-				.material-icons, .text {
+				.material-icons,
+				.text {
 					color: var(--primary);
 				}
 			}
@@ -161,23 +160,24 @@ aside {
 	}
 
 	&.is-expanded {
-		width: var(--sidebar-width);
+		width: 17vw;
 
 		.menu-toggle-wrap {
 			top: -3rem;
-			
+
 			.menu-toggle {
 				transform: rotate(-180deg);
 			}
 		}
 
-		h3, .button .text {
+		h3,
+		.button .text {
 			opacity: 1;
 		}
 
 		.button {
 			.material-icons {
-				margin-right: 1rem;
+				margin-right: 0;
 			}
 		}
 

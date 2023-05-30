@@ -1,15 +1,26 @@
-<template>
-  <SidebarComponent></SidebarComponent>
+<template style="height: 100%; width: 100%; overflow:hidden">
+	<div class="columns is-12">
+		<div class=" column is-2">
+			<SidebarComponent></SidebarComponent>
+		</div>
+		<div class="column is-10">
+			<RouterView></RouterView>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
 
-  import SidebarComponent from './components/SidebarComponent.vue'
-  export default{
-    components:{
-      SidebarComponent
-    }
-  }
+import { RouterView } from 'vue-router';
+import SidebarComponent from './components/SidebarComponent.vue'
+import LoginPage from './views/LoginPage.vue';
+export default {
+	components: {
+		// LoginPage,
+		SidebarComponent,
+		RouterView
+	}
+}
 </script>
 
 <style lang="scss">
@@ -44,12 +55,14 @@ button {
 
 .app {
 	display: flex;
+	overflow: hidden;
 
 	main {
+		overflow: hidden;
 		flex: 1 1 0;
 		padding: 2rem;
 
-		@media (max-width: 1024px) {
+		@media (max-width: 30vw) {
 			padding-left: 6rem;
 		}
 	}
