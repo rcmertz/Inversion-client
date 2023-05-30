@@ -16,10 +16,9 @@ import SidebarComponent from './components/SidebarComponent.vue'
 import LoginPage from './views/LoginPage.vue';
 export default {
 	components: {
-		// LoginPage,
-		SidebarComponent,
-		RouterView
-	}
+    SidebarComponent,
+    RouterView,
+}
 }
 </script>
 

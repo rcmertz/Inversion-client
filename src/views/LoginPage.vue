@@ -31,9 +31,11 @@ import { RouterLink } from 'vue-router';
 
                   <div class="field " style="max-width: 100%; min-width: 40%">
                     <div class="control is-justify-content-flex-end">
-                      <button type="submit" class="btn-login button mt-5 has-text-weight-bold" style="width: 100%">
-                        ENTRAR
-                      </button>
+                      <router-link to="/home">
+                        <button type="submit" class="btn-login button mt-5 has-text-weight-bold" style="width: 100%">
+                          ENTRAR
+                        </button>
+                      </router-link>
                     </div>
                   </div>
 
@@ -111,7 +113,7 @@ import { RouterLink } from 'vue-router';
   font-family: Inter, sans-serif;
   font-weight: bold;
   border-radius: 8px;
-  height: 2.2vw;
+  height: 2.7vw;
   background-color: #00FF7F;
   color: #040404;
   font-size: 18px;

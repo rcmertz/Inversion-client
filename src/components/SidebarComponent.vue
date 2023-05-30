@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="menu">
-			<router-link to="/settings" class="button">
+			<router-link to="/login" class="button">
 				<img src="../imagens/sair.png" />
 			</router-link>
 		</div>
