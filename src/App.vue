@@ -1,70 +1,34 @@
-<template style="height: 100%; width: 100%; overflow:hidden">
-	<div class="columns is-12">
-		<div class=" column is-2">
-			<SidebarComponent></SidebarComponent>
-		</div>
-		<div class="column is-10">
-			<RouterView></RouterView>
-		</div>
-	</div>
-</template>
+<script setup lang="ts">
+  import Sidebar from './components/Sidebar.vue';
+  import { isOpen } from './stores/sidebar';
+  import { onMounted } from 'vue';
+  import { userStore } from './stores/user';
+  import { useRouter } from 'vue-router';
 
-<script lang="ts">
+  const router = useRouter();
 
-import { RouterView } from 'vue-router';
-import SidebarComponent from './components/SidebarComponent.vue'
-import LoginPage from './views/LoginPage.vue';
-export default {
-	components: {
-		// LoginPage,
-		SidebarComponent,
-		RouterView
-	}
-}
+  onMounted(() => {
+    if (!userStore.user) {
+      router.push('/login');
+    }
+  });
 </script>
 
-<style lang="scss">
-:root {
-	--primary: #4ade80;
-	--primary-alt: #22c55e;
-	--grey: #64748b;
-	--dark: #1e293b;
-	--dark-alt: #334155;
-	--light: #f1f5f9;
-	--sidebar-width: 300px;
-}
+<template>
+  <Sidebar />
 
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Fira sans', sans-serif;
-}
+  <div :class="isOpen ? 'slot open' : 'slot'">
+    <RouterView />
+  </div>
+</template>
 
-body {
-	background: var(--light);
-}
+<style scoped>
+  .slot {
+    margin-left: 102px;
+    transition: all 0.3s;
+  }
 
-button {
-	cursor: pointer;
-	appearance: none;
-	border: none;
-	outline: none;
-	background: none;
-}
-
-.app {
-	display: flex;
-	overflow: hidden;
-
-	main {
-		overflow: hidden;
-		flex: 1 1 0;
-		padding: 2rem;
-
-		@media (max-width: 30vw) {
-			padding-left: 6rem;
-		}
-	}
-}
+  .slot.open {
+    margin-left: 378px;
+  }
 </style>

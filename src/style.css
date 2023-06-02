@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  /* colors */
+  --primary: #00ff7f;
+  --primary-alt: #00ff7fb3;
+  --background: #312b2b;
+  --input: #e8e8f2;
+  --sidebar: #3c3c3c;
+  --dashboard-status-card: #e5ecf6;
+  --dashboard-status-text: #1c1c1c;
+  --dashboard-status-income: #ffa450;
+  --dashboard-status-fund: #0000ff;
+  --dashboard-status-loss: #ff0000;
+
+  /* fonts */
+  --poppins: 'Poppins', sans-serif;
+  --inter: 'Inter', sans-serif;
+  --montserrat: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--background);
+}
+
+/* default styles */
+button,
+input {
+  background-color: unset;
+  border: none;
+  outline: none;
+}
+
+ul {
+  list-style: none;
+}
