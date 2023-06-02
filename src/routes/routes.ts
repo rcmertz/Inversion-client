@@ -3,6 +3,7 @@ import Dashboard from '@/views/Dashboard.vue';
 import Login from '@/views/Login.vue';
 import Cadastro from '@/views/Cadastro.vue';
 
+
 const routes = [
   {
     path: '/',
@@ -16,7 +17,7 @@ const routes = [
     path: '/cadastro',
     component: Cadastro,
   },
-  //SEGUIR ESSE PADRAO
+  //SEGUIR ESTE PADRAO
 ];
 
 export const router = createRouter({
