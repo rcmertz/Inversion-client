@@ -1,5 +1,5 @@
 {
-  "name": "inversion-alt",
+  "name": "inversion-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
+    "chart.js": "^4.3.0",
     "vue": "^3.2.47",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.1",
     "@vitejs/plugin-vue": "^4.1.0",
+    "prettier": "^2.8.8",
     "typescript": "^5.0.4",
     "vite": "^4.3.9",
     "vue-tsc": "^1.4.2"

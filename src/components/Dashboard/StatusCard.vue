@@ -35,7 +35,6 @@
 
 <style scoped>
   li {
-    width: 33.33333%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;

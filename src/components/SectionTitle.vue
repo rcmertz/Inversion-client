@@ -14,7 +14,7 @@
   h2 {
     color: #312b2b;
     border-left: 4px solid #435669;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--poppins);
     font-weight: 600;
     font-size: 36px;
     padding-left: 15px;

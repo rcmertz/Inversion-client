@@ -1,40 +1,51 @@
 <script setup lang="ts">
   import { reactive, computed } from 'vue';
   import { Icon } from '@iconify/vue';
-  import SectionTitle from '../SectionTitle.vue';
+  import SectionTitle from '@/components/SectionTitle.vue';
   import { formatCurrency } from '@/utils/formatCurrency';
+  import { useRoute, useRouter } from 'vue-router';
+  import { tableBody } from '@/data/carteira';
+  import { updateInvestimento } from '@/stores/carteira';
 
-  const form = reactive({
-    investimento: '',
-    quantidade: 0,
-    valorUnitario: 0,
-    data: '',
-    carteira: '',
-    operacao: '',
-  });
+  interface Props {
+    carteiraId: string | string[];
+  }
+
+  const props = defineProps<Props>();
+
+  const route = useRoute();
+  const router = useRouter();
+
+  // lógica do formulário
+  const form = reactive({ ...tableBody[Number(route.params.id) - 1], carteira: '' });
 
   const valorFinal = computed(() => {
-    return formatCurrency(form.quantidade * form.valorUnitario);
+    return formatCurrency(form.quantidade * form.preco);
   });
 
-  function handleSubmit() {
-    console.log({ ...form, valorFinal: form.quantidade * form.valorUnitario });
+  async function handleSubmit() {
+    await updateInvestimento({
+      id: route.params.id,
+      investimento: { ...form, valorTotal: form.quantidade * form.preco },
+    });
+
+    router.push('/carteiras/' + props.carteiraId);
   }
 </script>
 
 <template>
   <form @submit.prevent="handleSubmit">
     <header>
-      <SectionTitle title="Cadastro de investimento" />
+      <SectionTitle title="Editar rendimento" />
     </header>
 
     <!-- Investimento -->
     <div class="form-row">
       <label for="investimento">Investimento</label>
       <div class="custom-select">
-        <select name="investimento" id="investimento" v-model="form.investimento" required>
+        <select name="investimento" id="investimento" v-model="form.nome">
           <option disabled value="" class="placeholder">Selecione um investimento</option>
-          <option>LCI/IPCA + 4% INTER</option>
+          <option>{{ form.nome }}</option>
         </select>
         <Icon icon="icon-park-outline:down" class="select-icon" />
       </div>
@@ -43,60 +54,32 @@
     <!-- Quantidade -->
     <div class="form-row">
       <label for="quantidade">Quantidade</label>
-      <input
-        type="number"
-        name="quantidade"
-        id="quantidade"
-        min="0"
-        v-model="form.quantidade"
-        required
-      />
+      <input type="number" name="quantidade" id="quantidade" min="0" v-model="form.quantidade" />
     </div>
 
     <!-- Valor UN -->
     <div class="form-row">
       <label for="valor_unitario">Valor UN</label>
-      <input
-        type="number"
-        name="valor_unitario"
-        id="valor_unitario"
-        min="0"
-        v-model="form.valorUnitario"
-        required
-      />
+      <input type="number" name="valor_unitario" id="valor_unitario" min="0" v-model="form.preco" />
     </div>
 
     <!-- Valor Total -->
     <div class="form-row">
       <label for="valor_total">Valor Total</label>
-      <input
-        type="text"
-        name="valor_total"
-        id="valor_total"
-        v-model="valorFinal"
-        readonly
-        required
-      />
+      <input type="text" name="valor_total" id="valor_total" v-model="valorFinal" readonly />
     </div>
 
     <!-- Data -->
     <div class="form-row">
       <label for="data">Data</label>
-      <input
-        type="date"
-        name="data"
-        id="data"
-        v-model="form.data"
-        placeholder="dd/mm/aaaa"
-        required
-      />
+      <input type="date" name="data" id="data" v-model="form.data" />
     </div>
 
     <!-- Carteira -->
     <div class="form-row">
       <label for="carteira">Carteira</label>
       <div class="custom-select">
-        <select name="carteira" id="carteira" v-model="form.carteira" required>
+        <select name="carteira" id="carteira" v-model="form.carteira">
           <option disabled value="" class="placeholder">Selecione uma carteira</option>
           <option>Renda fixa</option>
           <option>Criptomoeda</option>
@@ -106,21 +89,13 @@
       </div>
     </div>
 
-    <!-- Operação -->
-    <div class="form-row">
-      <label for="operacao">Operação</label>
-      <div class="custom-select">
-        <select name="operacao" id="operacao" v-model="form.operacao" required>
-          <option disabled value="" class="placeholder">Selecione uma operação</option>
-          <option>Compra</option>
-          <option>Venda</option>
-        </select>
-        <Icon icon="icon-park-outline:down" class="select-icon" />
-      </div>
-    </div>
-
     <div class="buttons">
-      <RouterLink to="/investimento/rendimento">Rendimento</RouterLink>
+      <RouterLink :to="'/carteiras/editar-investimento/' + $route.params.id">
+        Investimento
+      </RouterLink>
+      <button type="button" class="cancel-edit" @click="$router.push('/carteiras')">
+        Cancelar
+      </button>
       <button type="submit">Confirmar</button>
     </div>
   </form>
@@ -199,7 +174,7 @@
     display: flex;
     align-items: center;
     place-self: flex-end;
-    grid-column: span 2 / span 2;
+    grid-column: span 3 / span 3;
     gap: 40px;
   }
 
@@ -216,9 +191,17 @@
     cursor: pointer;
   }
 
+  .cancel-edit {
+    background-color: #e51a1a;
+  }
+
   @media (max-width: 1400px) {
     form {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    .buttons {
+      grid-column: span 2 / span 2;
     }
   }
 </style>

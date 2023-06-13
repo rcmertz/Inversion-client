@@ -14,7 +14,7 @@ export const sidebar = [
   {
     id: '3',
     icon: 'fluent:document-data-24-regular',
-    name: 'Carteira',
-    route: '/carteira',
+    name: 'Carteiras',
+    route: '/carteiras',
   },
 ];

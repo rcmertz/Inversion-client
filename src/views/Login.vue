@@ -1,11 +1,14 @@
 <script setup lang="ts">
+  import Layout from '@/components/Layout.vue';
   import LoginForm from '@/components/Login/Form.vue';
 </script>
 
 <template>
-  <section>
-    <LoginForm />
-  </section>
+  <Layout>
+    <section>
+      <LoginForm />
+    </section>
+  </Layout>
 </template>
 
 <style scoped>

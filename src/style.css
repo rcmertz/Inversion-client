@@ -22,10 +22,14 @@
   --poppins: 'Poppins', sans-serif;
   --inter: 'Inter', sans-serif;
   --montserrat: 'Montserrat', sans-serif;
+
+  /* misc */
+  --shadow: 0 4px 12px -5px rgba(0, 0, 0, 0.25);
 }
 
 body {
   background-color: var(--background);
+  overflow-x: hidden;
 }
 
 /* default styles */

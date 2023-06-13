@@ -1,25 +1,43 @@
 <script setup lang="ts">
-  import { useRouter } from 'vue-router';
+  import { login } from '@/stores/user';
+  import { reactive } from 'vue';
 
-  const router = useRouter();
+  const user = reactive({ email: '', password: '' });
+
+  function handleSubmit() {
+    login(user);
+  }
 </script>
 
 <template>
-  <form>
+  <form @submit.prevent="handleSubmit">
     <h2>Inversión</h2>
     <div class="form-row email">
       <label for="email">E-mail</label>
-      <input type="text" name="email" id="email" placeholder="name@gmail.com" />
+      <input
+        type="text"
+        name="email"
+        id="email"
+        placeholder="name@gmail.com"
+        v-model="user.email"
+        required
+      />
     </div>
     <div class="form-row password">
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" placeholder="password" />
+      <input
+        type="password"
+        name="senha"
+        id="senha"
+        placeholder="password"
+        v-model="user.password"
+        required
+      />
     </div>
     <div class="auth-options">
       <p>Não tem conta? <RouterLink class="go-register" to="/cadastro">Criar</RouterLink></p>
-      <p><span>Esqueceu</span> sua senha?</p>
     </div>
-    <button type="button" @click="router.push('/')">Entrar</button>
+    <button type="submit">Entrar</button>
   </form>
 </template>
 
@@ -29,7 +47,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 82px 52px 32px;
+    padding: 80px 52px 32px;
     border-radius: 25px;
     width: 775px;
   }
@@ -60,21 +78,21 @@
   }
 
   label {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--inter);
     text-transform: uppercase;
-    padding-left: 10px;
+    /* padding-left: 10px; */
   }
 
   input {
     background-color: var(--input);
     border-radius: 8px;
-    padding: 34px;
+    padding: 32px;
     border: none;
     outline: none;
-    font-size: 25px;
-    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-family: var(--montserrat);
     font-weight: 500;
   }
 
@@ -88,14 +106,14 @@
 
   .auth-options > p {
     text-transform: uppercase;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--inter);
     font-weight: 600;
     font-size: 20;
   }
 
   .auth-options > p > span,
   .go-register {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--inter);
     color: var(--primary);
     cursor: pointer;
     text-decoration: none;
@@ -105,11 +123,11 @@
     align-self: flex-end;
     background-color: var(--primary);
     border-radius: 8px;
-    font-size: 35px;
+    font-size: 28px;
     font-weight: 600;
     border: none;
     text-transform: uppercase;
-    padding: 18px 32px;
+    padding: 18px 40px;
     cursor: pointer;
     transition: background-color 0.3s;
   }

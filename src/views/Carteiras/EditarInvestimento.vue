@@ -1,12 +1,12 @@
 <script setup lang="ts">
+  import InvestimentoForm from '@/components/Carteiras/Forms/InvestimentoForm.vue';
   import Layout from '@/components/Layout.vue';
-  import RendimentoForm from '@/components/Rendimento/Form.vue';
 </script>
 
 <template>
   <Layout sidebar>
     <section>
-      <RendimentoForm />
+      <InvestimentoForm :carteiraId="$route.params.id" />
     </section>
   </Layout>
 </template>
