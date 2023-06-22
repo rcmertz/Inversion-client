@@ -13,6 +13,7 @@
     "chart.js": "^4.3.0",
     "vue": "^3.2.47",
     "vue-chartjs": "^5.2.0",
+    "vue-imask": "^6.6.3",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {

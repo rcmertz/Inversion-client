@@ -1,0 +1,62 @@
+import { IIncome } from '@/interfaces/income';
+import { deleteIncome, getAllIncomes, registerIncome, updateIncome } from '@/services/income';
+import { reactive } from 'vue';
+
+export const incomeStore = reactive({
+  incomes: [] as IIncome[],
+});
+
+export async function getLocalIncomes() {
+  try {
+    const { data } = await getAllIncomes();
+
+    incomeStore.incomes = data.content;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function registerLocalIncome(incomeData: object) {
+  try {
+    const { data } = await registerIncome(incomeData);
+
+    incomeStore.incomes.push(data);
+
+    alert('Rendimento cadastrado com sucesso!');
+  } catch (error: any) {
+    console.log(error);
+    alert(error.response.data.erro);
+  }
+}
+
+export async function updateLocalIncome(id: number, incomeData: object) {
+  try {
+    const { data } = await updateIncome(id, incomeData);
+
+    incomeStore.incomes = incomeStore.incomes.map((item) => {
+      if (item.id === id) {
+        return { ...item, data };
+      } else {
+        return item;
+      }
+    });
+
+    alert('Rendimento atualizado com sucesso!');
+  } catch (error: any) {
+    console.log(error);
+    alert(error.response.data.erro);
+  }
+}
+
+export async function deleteLocalIncome(id: number, incomeData: object) {
+  try {
+    await deleteIncome(id, incomeData);
+
+    incomeStore.incomes = incomeStore.incomes.filter((item) => item.id !== id);
+
+    alert('Rendimento deletado com sucesso!');
+  } catch (error: any) {
+    console.log(error);
+    alert(error.response.data.erro);
+  }
+}

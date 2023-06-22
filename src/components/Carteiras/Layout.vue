@@ -1,16 +1,21 @@
 <script setup lang="ts">
+  import { getLocalWallets, walletStore } from '@/stores/wallet';
   import NavCard from './NavCard.vue';
-  import { carteiraStore } from '@/stores/carteira';
+  import { computed, onMounted } from 'vue';
 
-  // onMounted(() => {
-  //   getCarteiras();
-  // });
+  const activeWallets = computed(() => {
+    return walletStore.wallets.filter((item) => item.ativo);
+  });
+
+  onMounted(() => {
+    getLocalWallets();
+  });
 </script>
 
 <template>
   <section>
-    <nav v-if="carteiraStore.carteiras.length > 0">
-      <NavCard v-for="item in carteiraStore.carteiras" :tipo="item.tipo" :id="item.id" />
+    <nav v-if="activeWallets.length > 0">
+      <NavCard v-for="item in activeWallets" :="item" />
     </nav>
     <h1 v-else>0 carteiras cadastradas...</h1>
 
@@ -27,6 +32,8 @@
 
   nav {
     display: flex;
+    width: 1715px;
+    overflow-x: auto;
     gap: 72px;
     margin-bottom: 56px;
   }

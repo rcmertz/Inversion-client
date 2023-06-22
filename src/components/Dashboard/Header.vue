@@ -1,11 +1,13 @@
 <script setup lang="ts">
+  import { userStore } from '@/stores/user';
   import { Icon } from '@iconify/vue';
 </script>
 
 <template>
   <div class="header">
     <Icon icon="ooui:user-avatar" class="icon" />
-    <h5>name@gmail.com</h5>
+    <h5 v-if="userStore.user">{{ userStore.user.nome }}</h5>
+    <h5 v-else>name@gmail.com</h5>
   </div>
 </template>
 

@@ -1,25 +1,40 @@
 <script setup lang="ts">
-  import { reactive, computed } from 'vue';
+  import { reactive, computed, onMounted } from 'vue';
   import { Icon } from '@iconify/vue';
   import SectionTitle from '../SectionTitle.vue';
   import { formatCurrency } from '@/utils/formatCurrency';
+  import { registerLocalInvestment } from '@/stores/investment';
+  import { getLocalWallets, walletStore } from '@/stores/wallet';
 
   const form = reactive({
-    investimento: '',
+    tipo: '',
     quantidade: 0,
-    valorUnitario: 0,
+    valor: 0,
     data: '',
     carteira: '',
     operacao: '',
+    ativo: true,
   });
 
   const valorFinal = computed(() => {
-    return formatCurrency(form.quantidade * form.valorUnitario);
+    return formatCurrency(form.quantidade * form.valor);
   });
 
-  function handleSubmit() {
-    console.log({ ...form, valorFinal: form.quantidade * form.valorUnitario });
+  const activeWallets = computed(() => {
+    return walletStore.wallets.filter((item) => item.ativo);
+  });
+
+  const selectedWallet = computed(() => {
+    return activeWallets.value.find((item) => item.descricaoCarteira === form.carteira);
+  });
+
+  async function handleSubmit() {
+    await registerLocalInvestment({ ...form, carteira: { id: selectedWallet.value?.id } });
   }
+
+  onMounted(() => {
+    getLocalWallets();
+  });
 </script>
 
 <template>
@@ -30,14 +45,14 @@
 
     <!-- Investimento -->
     <div class="form-row">
-      <label for="investimento">Investimento</label>
-      <div class="custom-select">
-        <select name="investimento" id="investimento" v-model="form.investimento" required>
-          <option disabled value="" class="placeholder">Selecione um investimento</option>
-          <option>LCI/IPCA + 4% INTER</option>
-        </select>
-        <Icon icon="icon-park-outline:down" class="select-icon" />
-      </div>
+      <label for="tipo">Investimento</label>
+      <input
+        name="tipo"
+        id="tipo"
+        placeholder="Nome do investimento"
+        v-model="form.tipo"
+        required
+      />
     </div>
 
     <!-- Quantidade -->
@@ -55,13 +70,16 @@
 
     <!-- Valor UN -->
     <div class="form-row">
-      <label for="valor_unitario">Valor UN</label>
+      <label for="valor">Valor UN</label>
+      <p class="currency">R$</p>
       <input
         type="number"
-        name="valor_unitario"
-        id="valor_unitario"
+        name="valor"
+        id="valor"
         min="0"
-        v-model="form.valorUnitario"
+        step="0.01"
+        v-model="form.valor"
+        class="valor-unitario"
         required
       />
     </div>
@@ -96,11 +114,12 @@
     <div class="form-row">
       <label for="carteira">Carteira</label>
       <div class="custom-select">
-        <select name="carteira" id="carteira" v-model="form.carteira" required>
+        <select id="carteira" v-model="form.carteira" required>
           <option disabled value="" class="placeholder">Selecione uma carteira</option>
-          <option>Renda fixa</option>
-          <option>Criptomoeda</option>
-          <option>Renda variável</option>
+          <option v-if="activeWallets.length > 0" v-for="item in activeWallets">
+            {{ item.descricaoCarteira }}
+          </option>
+          <option disabled value="" v-else>0 carteiras cadastradas</option>
         </select>
         <Icon icon="icon-park-outline:down" class="select-icon" />
       </div>
@@ -145,6 +164,7 @@
     flex-direction: column;
     gap: 10px;
     grid-column: span 1 / span 1;
+    position: relative;
   }
 
   label {
@@ -156,7 +176,7 @@
   .custom-select {
     display: flex;
     position: relative;
-    height: 84px;
+    height: 77px;
   }
 
   .custom-select select {
@@ -173,7 +193,6 @@
     height: 100%;
     color: rgba(0, 0, 0, 40%);
     border-radius: 4px;
-    box-shadow: 0 4px 16px -5px rgba(0, 0, 0, 0.25);
   }
 
   .select-icon {
@@ -192,7 +211,20 @@
     font-family: var(--montserrat);
     font-weight: 500;
     color: rgba(0, 0, 0, 40%);
-    box-shadow: 0 4px 12px -5px rgba(0, 0, 0, 0.25);
+  }
+
+  .valor-unitario {
+    padding-left: 64px;
+  }
+
+  .currency {
+    position: absolute;
+    top: 54%;
+    left: 24px;
+    font-size: 24px;
+    font-family: var(--montserrat);
+    font-weight: 500;
+    color: rgba(0, 0, 0, 40%);
   }
 
   .buttons {

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { login } from '@/stores/user';
+  import { localLogin } from '@/stores/user';
   import { reactive } from 'vue';
 
-  const user = reactive({ email: '', password: '' });
+  const user = reactive({ email: '', senha: '' });
 
   function handleSubmit() {
-    login(user);
+    localLogin(user);
   }
 </script>
 
@@ -30,7 +30,7 @@
         name="senha"
         id="senha"
         placeholder="password"
-        v-model="user.password"
+        v-model="user.senha"
         required
       />
     </div>
@@ -49,7 +49,7 @@
     align-items: center;
     padding: 80px 52px 32px;
     border-radius: 25px;
-    width: 775px;
+    width: 680px;
   }
 
   h2 {
@@ -59,7 +59,7 @@
     border-left: solid 4px #000;
     line-height: 45px;
     padding-left: 19px;
-    margin-bottom: 101px;
+    margin-bottom: 72px;
   }
 
   .form-row {
@@ -78,7 +78,7 @@
   }
 
   label {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     font-family: var(--inter);
     text-transform: uppercase;
@@ -88,10 +88,10 @@
   input {
     background-color: var(--input);
     border-radius: 8px;
-    padding: 32px;
+    padding: 24px;
     border: none;
     outline: none;
-    font-size: 20px;
+    font-size: 18px;
     font-family: var(--montserrat);
     font-weight: 500;
   }
@@ -123,11 +123,11 @@
     align-self: flex-end;
     background-color: var(--primary);
     border-radius: 8px;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     border: none;
     text-transform: uppercase;
-    padding: 18px 40px;
+    padding: 12px 48px;
     cursor: pointer;
     transition: background-color 0.3s;
   }

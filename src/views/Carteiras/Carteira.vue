@@ -2,21 +2,33 @@
   import Layout from '@/components/Layout.vue';
   import LayoutCarteira from '@/components/Carteiras/Layout.vue';
   import Table from '@/components/Carteiras/Table.vue';
-  import { carteiraStore } from '@/stores/carteira';
-  // import { onMounted } from 'vue-router';
-  // import { ref } from 'vue';
+  import { getLocalInvestments, investmentStore } from '@/stores/investment';
+  import { computed, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
 
-  // const tableData = ref([]);
+  const route = useRoute();
 
-  // onMounted(() => {
-  //   getTableData();
-  // });
+  const investments = computed(() => {
+    return investmentStore.investments.filter(
+      (item) => item.ativo && item.carteira.id === Number(route.params.id)
+    );
+  });
+
+  const incomes = computed(() => {
+    return investments.value.map((item) => {
+      return item.rendimentos?.filter((income) => income.papel.id === item.id);
+    });
+  });
+
+  onMounted(() => {
+    getLocalInvestments();
+  });
 </script>
 
 <template>
   <Layout sidebar>
     <LayoutCarteira>
-      <Table :tableData="carteiraStore.investimentos" />
+      <Table :investments="investments" :incomes="incomes" />
     </LayoutCarteira>
   </Layout>
 </template>

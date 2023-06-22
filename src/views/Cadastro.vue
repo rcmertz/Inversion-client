@@ -23,6 +23,6 @@
 
   header {
     background-color: var(--primary-alt);
-    padding: 33px 36px;
+    padding: 24px;
   }
 </style>

@@ -1,28 +1,32 @@
 <script setup lang="ts">
-  import { reactive, ref, watch } from 'vue';
-  import { RouterLink } from 'vue-router';
+  import { reactive } from 'vue';
+  import { RouterLink, useRouter } from 'vue-router';
+  import { useIMask } from 'vue-imask';
+  import { localRegister } from '@/stores/user';
 
+  const router = useRouter();
   const form = reactive({
-    name: '',
-    lastName: '',
+    nome: '',
     email: '',
-    password: '',
+    senha: '',
+    ativo: true,
   });
 
-  const cpf = ref('');
-
-  watch(cpf, (newValue) => {
-    const cleanedCpf = newValue.replace(/\D/g, '');
-    if (cleanedCpf.length === 11) {
-      const formatted = cleanedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-      cpf.value = formatted;
-    } else {
-      cpf.value = cleanedCpf;
-    }
+  const { el: cpf, unmasked: unmaskedCPF } = useIMask({
+    mask: '000.000.000-00',
   });
 
-  function handleSubmit() {
-    console.log({ ...form, cpf: cpf.value });
+  const { el: phone, unmasked: unmaskedPhone } = useIMask({
+    mask: '(00) 00000-0000',
+  });
+
+  async function handleSubmit() {
+    await localRegister({
+      ...form,
+      cpf: unmaskedCPF.value,
+      telefone: unmaskedPhone.value,
+    });
+    router.push('/');
   }
 </script>
 
@@ -30,23 +34,23 @@
   <form @submit.prevent="handleSubmit">
     <div class="form-row">
       <label for="nome">Nome</label>
-      <input type="text" name="nome" id="nome" placeholder="name" v-model="form.name" required />
+      <input type="text" name="nome" id="nome" placeholder="name" v-model="form.nome" required />
     </div>
-    <div class="form-row">
+    <!-- <div class="form-row">
       <label for="sobrenome">Sobrenome</label>
       <input
         type="text"
         name="sobrenome"
         id="sobrenome"
         placeholder="last name"
-        v-model="form.lastName"
+        v-model="form.sobrenome"
         required
       />
-    </div>
+    </div> -->
     <div class="form-row">
       <label for="email">E-mail</label>
       <input
-        type="text"
+        type="email"
         name="email"
         id="email"
         placeholder="name@gmail.com"
@@ -55,14 +59,26 @@
       />
     </div>
     <div class="form-row">
+      <label for="telefone">Telefone</label>
+      <input
+        type="text"
+        name="telefone"
+        id="telefone"
+        placeholder="(99) 99999-9999"
+        maxlength="15"
+        ref="phone"
+        required
+      />
+    </div>
+    <div class="form-row">
       <label for="cpf">CPF</label>
       <input
         type="text"
-        maxlength="11"
         name="cpf"
         id="cpf"
         placeholder="123.456.789-01"
-        v-model="cpf"
+        maxlength="14"
+        ref="cpf"
         required
       />
     </div>
@@ -73,7 +89,7 @@
         name="senha"
         id="senha"
         placeholder="password"
-        v-model="form.password"
+        v-model="form.senha"
         required
       />
     </div>
@@ -95,20 +111,20 @@
   .form-row {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
   }
 
   label {
     font-family: var(--inter);
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
   }
 
   input {
     background-color: var(--input);
-    padding: 28px;
+    padding: 24px;
     border-radius: 8px;
-    font-size: 20px;
+    font-size: 18px;
     font-family: var(--montserrat);
     font-weight: 500;
   }
@@ -117,7 +133,7 @@
     text-transform: uppercase;
     font-family: var(--inter);
     font-weight: 600;
-    font-size: 20;
+    font-size: 16px;
     grid-column: span 2 / span 2;
     margin-top: -5px;
   }
@@ -129,11 +145,11 @@
   }
 
   button {
-    padding-block: 26px;
+    padding-block: 24px;
     text-transform: uppercase;
     background-color: var(--primary-alt);
     font-family: var(--inter);
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     cursor: pointer;
     border-radius: 8px;

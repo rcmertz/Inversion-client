@@ -1,66 +1,75 @@
 <script setup lang="ts">
-  import { reactive, computed } from 'vue';
+  import { computed } from 'vue';
   import { Icon } from '@iconify/vue';
-  import SectionTitle from '@/components/SectionTitle.vue';
   import { formatCurrency } from '@/utils/formatCurrency';
-  import { useRoute, useRouter } from 'vue-router';
-  import { tableBody } from '@/data/carteira';
-  import { updateInvestimento } from '@/stores/carteira';
+  import SectionTitle from '@/components/SectionTitle.vue';
+  import { useRouter } from 'vue-router';
+  import { updateLocalInvestment } from '@/stores/investment';
+  import { IInvestment } from '@/interfaces/investment';
 
   interface Props {
-    carteiraId: string | string[];
+    investment: IInvestment;
+    wallet: IInvestment['carteira'];
   }
 
   const props = defineProps<Props>();
 
-  const route = useRoute();
   const router = useRouter();
 
-  // lógica do formulário
-  const form = reactive({ ...tableBody[Number(route.params.id) - 1], carteira: '' });
-
   const valorFinal = computed(() => {
-    return formatCurrency(form.quantidade * form.preco);
+    return formatCurrency(props.investment.quantidade * props.investment.valor);
   });
 
   async function handleSubmit() {
-    await updateInvestimento({
-      id: route.params.id,
-      investimento: { ...form, valorTotal: form.quantidade * form.preco },
+    await updateLocalInvestment(props.investment.id, {
+      ...props.investment,
+      carteira: {
+        id: props.wallet.id,
+      },
     });
 
-    router.push('/carteiras/' + props.carteiraId);
+    router.push('/carteiras/' + props.wallet.id);
   }
 </script>
 
 <template>
   <form @submit.prevent="handleSubmit">
     <header>
-      <SectionTitle title="Editar rendimento" />
+      <SectionTitle title="Editar investimento" />
     </header>
 
     <!-- Investimento -->
     <div class="form-row">
-      <label for="investimento">Investimento</label>
-      <div class="custom-select">
-        <select name="investimento" id="investimento" v-model="form.nome">
-          <option disabled value="" class="placeholder">Selecione um investimento</option>
-          <option>{{ form.nome }}</option>
-        </select>
-        <Icon icon="icon-park-outline:down" class="select-icon" />
-      </div>
+      <label for="descricao">Investimento</label>
+      <input type="text" name="descricao" id="descricao" v-model="investment.tipo" />
     </div>
 
     <!-- Quantidade -->
     <div class="form-row">
       <label for="quantidade">Quantidade</label>
-      <input type="number" name="quantidade" id="quantidade" min="0" v-model="form.quantidade" />
+      <input
+        type="number"
+        name="quantidade"
+        id="quantidade"
+        min="0"
+        v-model="investment.quantidade"
+      />
     </div>
 
     <!-- Valor UN -->
     <div class="form-row">
       <label for="valor_unitario">Valor UN</label>
-      <input type="number" name="valor_unitario" id="valor_unitario" min="0" v-model="form.preco" />
+      <p class="currency">R$</p>
+      <input
+        type="number"
+        name="valor_unitario"
+        id="valor_unitario"
+        min="0"
+        step="0.01"
+        v-model="investment.valor"
+        class="valor-unitario"
+        required
+      />
     </div>
 
     <!-- Valor Total -->
@@ -72,30 +81,35 @@
     <!-- Data -->
     <div class="form-row">
       <label for="data">Data</label>
-      <input type="date" name="data" id="data" v-model="form.data" />
+      <input type="date" name="data" id="data" v-model="investment.cadastro" />
     </div>
 
     <!-- Carteira -->
     <div class="form-row">
       <label for="carteira">Carteira</label>
+      <input type="text" id="carteira" v-model="wallet.descricaoCarteira" />
+    </div>
+
+    <!-- Operação -->
+    <div class="form-row">
+      <label for="operacao">Operação</label>
       <div class="custom-select">
-        <select name="carteira" id="carteira" v-model="form.carteira">
-          <option disabled value="" class="placeholder">Selecione uma carteira</option>
-          <option>Renda fixa</option>
-          <option>Criptomoeda</option>
-          <option>Renda variável</option>
+        <select name="operacao" id="operacao" v-model="investment.operacao">
+          <option disabled value="" class="placeholder">Selecione uma operação</option>
+          <option>Compra</option>
+          <option>Venda</option>
         </select>
         <Icon icon="icon-park-outline:down" class="select-icon" />
       </div>
     </div>
 
     <div class="buttons">
-      <RouterLink :to="'/carteiras/editar-investimento/' + $route.params.id">
-        Investimento
+      <RouterLink :to="'/investimento/editar-rendimento/' + $route.params.id">
+        Rendimento
       </RouterLink>
-      <button type="button" class="cancel-edit" @click="$router.push('/carteiras')">
+      <RouterLink :to="'/carteiras/' + wallet.id" class="cancel-edit">
         Cancelar
-      </button>
+      </RouterLink>
       <button type="submit">Confirmar</button>
     </div>
   </form>
@@ -120,6 +134,7 @@
     flex-direction: column;
     gap: 10px;
     grid-column: span 1 / span 1;
+    position: relative;
   }
 
   label {
@@ -148,7 +163,6 @@
     height: 100%;
     color: rgba(0, 0, 0, 40%);
     border-radius: 4px;
-    box-shadow: 0 4px 16px -5px rgba(0, 0, 0, 0.25);
   }
 
   .select-icon {
@@ -167,7 +181,20 @@
     font-family: var(--montserrat);
     font-weight: 500;
     color: rgba(0, 0, 0, 40%);
-    box-shadow: 0 4px 12px -5px rgba(0, 0, 0, 0.25);
+  }
+
+  .valor-unitario {
+    padding-left: 64px;
+  }
+
+  .currency {
+    position: absolute;
+    top: 54%;
+    left: 24px;
+    font-size: 24px;
+    font-family: var(--montserrat);
+    font-weight: 500;
+    color: rgba(0, 0, 0, 40%);
   }
 
   .buttons {

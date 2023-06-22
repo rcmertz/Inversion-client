@@ -1,19 +1,35 @@
 <script setup lang="ts">
   import { tableHead } from '@/data/carteira';
+  import { IInvestment } from '@/interfaces/investment';
+  import { deleteLocalInvestment } from '@/stores/investment';
   import { formatCurrency } from '@/utils/formatCurrency';
   import { Icon } from '@iconify/vue';
-  import { IInvestimento } from '@/interfaces/investimento';
-  import { deleteInvestimento } from '@/stores/carteira';
+  import { computed } from 'vue';
 
   interface Props {
-    tableData: IInvestimento[];
+    investments: IInvestment[];
+    incomes: IInvestment['rendimentos'][];
   }
 
-  defineProps<Props>();
+  const props = defineProps<Props>();
+
+  const rendimentos = computed(() => {
+    return props.incomes.map((item) => {
+      return item?.reduce((acc, curr) => {
+        return acc + curr.preco_un * curr.quantidade;
+      }, 0);
+    });
+  });
+
+  function formatDate(defaultDate: string) {
+    return computed(() => {
+      return defaultDate.split('', 10).join('');
+    });
+  }
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="investments.length > 0">
     <table>
       <tr class="table-head">
         <th v-for="item in tableHead" :key="item.id">
@@ -21,9 +37,9 @@
         </th>
         <th></th>
       </tr>
-      <tr v-for="item in tableData" class="table-rows">
+      <tr v-for="item in investments" class="table-rows">
         <td class="table-name">
-          {{ item.nome }}
+          {{ item.tipo }}
         </td>
         <td class="table-operation">
           {{ item.operacao }}
@@ -32,32 +48,31 @@
           {{ item.quantidade }}
         </td>
         <td class="table-price">
-          {{ formatCurrency(item.preco) }}
+          {{ formatCurrency(item.valor) }}
         </td>
         <td class="table-income">
-          {{ formatCurrency(item.rendimento) }}
+          {{ formatCurrency(rendimentos[item.id - 1]) }}
         </td>
         <td class="table-date">
-          {{ item.data }}
+          {{ formatDate(item.cadastro) }}
         </td>
         <td class="table-average">
-          {{ formatCurrency(item.precoMedio) }}
+          {{ formatCurrency(item.id) }}
         </td>
         <td class="table-total">
-          {{ formatCurrency(item.valorTotal) }}
+          {{ formatCurrency(item.quantidade * item.valor + rendimentos[item.id - 1]) }}
         </td>
         <td class="table-actions">
-          <button
-            type="button"
+          <RouterLink
             class="action-btn edit-btn"
-            @click="$router.push('/carteiras/editar-investimento/' + item.id)"
+            :to="'/investimento/editar-investimento/' + item.id"
           >
             <Icon icon="bxs:pencil" class="action-icon edit-icon" />
-          </button>
+          </RouterLink>
           <button
             type="button"
             class="action-btn delete-btn"
-            @click="deleteInvestimento(item.id)"
+            @click="deleteLocalInvestment(item.id, { ...item, ativo: false })"
           >
             <Icon icon="fa6-solid:trash-can" class="action-icon delete-icon" />
           </button>
@@ -65,6 +80,7 @@
       </tr>
     </table>
   </div>
+  <h2 v-else class="disclaim">Essa carteira ainda não tem investimentos...</h2>
 </template>
 
 <style scoped>
@@ -156,6 +172,7 @@
 
   .action-icon {
     font-size: 20px;
+    color: #000;
   }
 
   .modal {
@@ -175,5 +192,9 @@
     z-index: 1;
     background-color: #000;
     opacity: 0.3;
+  }
+
+  .disclaim {
+    color: #fff;
   }
 </style>

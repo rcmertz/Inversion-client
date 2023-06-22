@@ -3,10 +3,12 @@
   import { sidebar } from '@/data/sidebar';
   import { isOpen, toggleSidebar } from '@/stores/sidebar';
   import { useRouter } from 'vue-router';
+  import { localLogout, userStore } from '@/stores/user';
 
   const router = useRouter();
 
-  function handleLogout() {
+  async function handleLogout() {
+    await localLogout();
     router.push('/login');
   }
 </script>
@@ -19,14 +21,17 @@
         <button type="button" @click="toggleSidebar">
           <Icon
             :icon="isOpen ? 'heroicons:arrow-left-20-solid' : 'heroicons:arrow-right-20-solid'"
-            class="icon toggle-icon" />
+            class="icon toggle-icon"
+          />
         </button>
       </div>
       <div
         v-if="$route.path.includes('carteira') || $route.path.includes('investimento')"
-        class="current-user">
+        class="current-user"
+      >
         <Icon icon="ooui:user-avatar" class="user-icon" />
-        <p v-if="isOpen">name@gmail.com</p>
+        <p v-if="isOpen && userStore.user">{{ userStore.user.nome }}</p>
+        <p v-else-if="isOpen">user@gmail.com</p>
       </div>
       <div class="links-list">
         <RouterLink
@@ -34,7 +39,8 @@
           :to="item.route"
           v-for="item in sidebar"
           :key="item.id"
-          :class="isOpen ? 'link open' : 'link'">
+          :class="isOpen ? 'link open' : 'link'"
+        >
           <Icon :icon="item.icon" class="icon link-icon" />
           <h6 v-if="isOpen">{{ item.name }}</h6>
         </RouterLink>

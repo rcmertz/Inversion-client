@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { reactive, computed, onMounted } from 'vue';
   import { Icon } from '@iconify/vue';
-  import SectionTitle from '../SectionTitle.vue';
+  import SectionTitle from '../../SectionTitle.vue';
   import { formatCurrency } from '@/utils/formatCurrency';
   import { getLocalInvestments, investmentStore } from '@/stores/investment';
   import { getLocalWallets } from '@/stores/wallet';
-  import { registerLocalIncome } from '@/stores/income';
+  import { updateLocalIncome } from '@/stores/income';
 
   const form = reactive({
     descricao: '',
@@ -28,12 +28,7 @@
   });
 
   async function handleSubmit() {
-    await registerLocalIncome({
-      ...form,
-      papel: {
-        id: selectedInvestment.value?.id,
-      },
-    });
+    await updateLocalIncome(1, form);
   }
 
   const selectedWallet = computed(() => {
@@ -54,7 +49,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <header>
-      <SectionTitle title="Cadastro de rendimento" />
+      <SectionTitle title="Editar rendimento" />
     </header>
 
     <!-- Investimento -->
@@ -130,16 +125,6 @@
     <!-- Carteira -->
     <div class="form-row">
       <label for="carteira">Carteira</label>
-      <!-- <div class="custom-select">
-        <select name="carteira" id="carteira" v-model="form.carteira" required>
-          <option disabled value="" class="placeholder">Selecione uma carteira</option>
-          <option v-if="activeWallets.length > 0" v-for="item in activeWallets">
-            {{ item.descricaoCarteira }}
-          </option>
-          <option disabled value="" v-else>0 investimentos cadastrados</option>
-        </select>
-        <Icon icon="icon-park-outline:down" class="select-icon" />
-      </div> -->
       <input
         type="text"
         id="data"
@@ -150,7 +135,7 @@
     </div>
 
     <div class="buttons">
-      <RouterLink to="/investimento">Investimento</RouterLink>
+      <RouterLink :to="'/investimento/editar-investimento/' + $route.params.id">Investimento</RouterLink>
       <button type="submit">Confirmar</button>
     </div>
   </form>

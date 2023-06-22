@@ -1,14 +1,18 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue';
-  import { ref } from 'vue';
+  import { reactive, ref } from 'vue';
   import SectionTitle from '../SectionTitle.vue';
-  import { registerCarteira } from '@/stores/carteira';
+  import { registerLocalWallet } from '@/stores/wallet';
 
   const modal = ref(false);
-  const carteira = ref('');
+  const form = reactive({
+    descricaoCarteira: '',
+    ativo: true,
+    valorCarteira: 0,
+  });
 
   async function handleSubmit() {
-    await registerCarteira(carteira.value);
+    await registerLocalWallet(form);
     modal.value = false;
   }
 </script>
@@ -18,8 +22,8 @@
     <SectionTitle title="Cadastre sua carteira" />
     <input
       type="text"
-      name="carteira"
-      v-model="carteira"
+      name="descricaoCarteira"
+      v-model="form.descricaoCarteira"
       placeholder="Nome da carteira..."
       required
     />
@@ -71,7 +75,7 @@
 
   .back-layer {
     width: 100vw;
-    height: 100vw;
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
