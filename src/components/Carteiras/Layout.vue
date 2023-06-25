@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { getLocalWallets, walletStore } from '@/stores/wallet';
+  import { getLocalWallets, useWallet } from '@/stores/wallet';
   import NavCard from './NavCard.vue';
   import { computed, onMounted } from 'vue';
 
   const activeWallets = computed(() => {
-    return walletStore.wallets.filter((item) => item.ativo);
+    return useWallet.wallets.filter((item) => item.ativo);
   });
 
   onMounted(() => {

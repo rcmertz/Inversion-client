@@ -1,34 +1,43 @@
 <script setup lang="ts">
   import Layout from '@/components/Layout.vue';
   import LayoutCarteira from '@/components/Carteiras/Layout.vue';
-  import Table from '@/components/Carteiras/Table.vue';
-  import { getLocalInvestments, investmentStore } from '@/stores/investment';
+  import Table from '@/components/Carteiras/Carteira/Table.vue';
   import { computed, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
+  import { getLocalOperations, useOperation } from '@/stores/operation';
+  import { getLocalInvestments, useInvestment } from '@/stores/investment';
+  import { useIncome } from '@/stores/income';
 
   const route = useRoute();
 
-  const investments = computed(() => {
-    return investmentStore.investments.filter(
-      (item) => item.ativo && item.carteira.id === Number(route.params.id)
-    );
-  });
-
-  const incomes = computed(() => {
-    return investments.value.map((item) => {
-      return item.rendimentos?.filter((income) => income.papel.id === item.id);
+  const operations = computed(() => {
+    return useOperation.operations?.filter((item) => {
+      return (
+        item.ativo &&
+        item.investimento.ativo &&
+        item.investimento.carteira?.id === Number(route.params.id)
+      );
     });
   });
 
-  onMounted(() => {
-    getLocalInvestments();
+  const incomes = computed(() => {
+    return useIncome.incomes.filter((item) => item.ativo);
+  });
+
+  const investments = computed(() => {
+    return useInvestment.investments.filter((item) => item.ativo);
+  });
+
+  onMounted(async () => {
+    await getLocalInvestments();
+    await getLocalOperations();
   });
 </script>
 
 <template>
   <Layout sidebar>
     <LayoutCarteira>
-      <Table :investments="investments" :incomes="incomes" />
+      <Table :incomes="incomes" :operations="operations" :investments="investments" />
     </LayoutCarteira>
   </Layout>
 </template>

@@ -1,31 +1,17 @@
+import { IIncome } from './income';
+import { IOperation } from './operation';
+import { IWallet } from './wallet';
+
 export interface IInvestment {
   id: number;
   cadastro: string;
   atualizado: undefined;
   excluido: undefined;
   ativo: boolean;
-  valor: number;
-  quantidade: number;
-  tipo: string;
-  operacao: string;
-  carteira: {
-    id: number;
-    descricaoCarteira: string;
-    cadastro: string;
-    ativo: boolean;
-  };
-  rendimentos: {
-    id: number;
-    cadastro: string;
-    atualizado: any;
-    excluido: any;
-    ativo: boolean;
-    preco_un: number;
-    quantidade: number;
-    data: string;
-    descricao: string;
-    papel: {
-      id: number;
-    };
-  }[];
+  valorInvestimento: number;
+  nomeInvestimento: string;
+  carteira: IWallet;
+  rendimentos: IIncome[];
+  operacoes: IOperation[];
+  data: string;
 }

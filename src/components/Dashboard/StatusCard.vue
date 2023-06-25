@@ -1,14 +1,12 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue';
+  import { formatCurrency } from '@/utils/formatCurrency';
+import { Icon } from '@iconify/vue';
 
   interface Props {
-    item: {
-      id: string;
-      title: string;
-      value: string;
-      income: number;
-      icon: string;
-    };
+    title: string;
+    value: string;
+    total?: number;
+    icon: string;
   }
 
   defineProps<Props>();
@@ -16,19 +14,11 @@
 
 <template>
   <li>
-    <h6>{{ item.title }}</h6>
-    <Icon :icon="item.icon" class="status-icon" />
-    <h4>{{ item.value }}</h4>
-    <div v-if="item.income > 0" class="income positive-income">
-      <p>+ {{ item.income }}%</p>
-      <Icon icon="ant-design:rise-outlined" class="income-icon" />
-    </div>
-    <div v-else-if="item.income < 0" class="income negative-income">
-      <p>{{ item.income }}%</p>
-      <Icon icon="ant-design:fall-outlined" class="income-icon" />
-    </div>
-    <div v-else class="income neutral-income">
-      <p>{{ item.income }}%</p>
+    <h6>{{ title }}</h6>
+    <Icon :icon="icon" class="status-icon" v-if="icon" />
+    <h4>{{ value }}</h4>
+    <div v-if="!isNaN(total!)" class="income">
+      <p>{{ formatCurrency(total!) }}</p>
     </div>
   </li>
 </template>

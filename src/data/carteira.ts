@@ -22,7 +22,7 @@ export const navLinks = [
 export const tableHead = [
   {
     id: '1',
-    title: 'Nome',
+    title: 'Investimento',
   },
   {
     id: '2',

@@ -7,14 +7,14 @@ export const sidebar = [
   },
   {
     id: '2',
-    icon: 'iconoir:money-square',
-    name: 'Investimento',
-    route: '/investimento',
-  },
-  {
-    id: '3',
     icon: 'fluent:document-data-24-regular',
     name: 'Carteiras',
     route: '/carteiras',
+  },
+  {
+    id: '3',
+    icon: 'iconoir:money-square',
+    name: 'Operação',
+    route: '/operacao',
   },
 ];

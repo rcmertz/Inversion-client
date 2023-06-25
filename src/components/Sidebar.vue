@@ -3,7 +3,7 @@
   import { sidebar } from '@/data/sidebar';
   import { isOpen, toggleSidebar } from '@/stores/sidebar';
   import { useRouter } from 'vue-router';
-  import { localLogout, userStore } from '@/stores/user';
+  import { localLogout, useUser } from '@/stores/user';
 
   const router = useRouter();
 
@@ -26,11 +26,11 @@
         </button>
       </div>
       <div
-        v-if="$route.path.includes('carteira') || $route.path.includes('investimento')"
+        v-if="$route.path.includes('carteira') || $route.path.includes('operacao')"
         class="current-user"
       >
         <Icon icon="ooui:user-avatar" class="user-icon" />
-        <p v-if="isOpen && userStore.user">{{ userStore.user.nome }}</p>
+        <p v-if="isOpen && useUser.user">{{ useUser.user.nome }}</p>
         <p v-else-if="isOpen">user@gmail.com</p>
       </div>
       <div class="links-list">

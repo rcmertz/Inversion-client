@@ -1,8 +1,9 @@
 import { IIncome } from '@/interfaces/income';
+import { router } from '@/routes/routes';
 import { deleteIncome, getAllIncomes, registerIncome, updateIncome } from '@/services/income';
 import { reactive } from 'vue';
 
-export const incomeStore = reactive({
+export const useIncome = reactive({
   incomes: [] as IIncome[],
 });
 
@@ -10,7 +11,7 @@ export async function getLocalIncomes() {
   try {
     const { data } = await getAllIncomes();
 
-    incomeStore.incomes = data.content;
+    useIncome.incomes = data.content;
   } catch (error) {
     console.log(error);
   }
@@ -20,7 +21,7 @@ export async function registerLocalIncome(incomeData: object) {
   try {
     const { data } = await registerIncome(incomeData);
 
-    incomeStore.incomes.push(data);
+    useIncome.incomes.push(data);
 
     alert('Rendimento cadastrado com sucesso!');
   } catch (error: any) {
@@ -33,7 +34,7 @@ export async function updateLocalIncome(id: number, incomeData: object) {
   try {
     const { data } = await updateIncome(id, incomeData);
 
-    incomeStore.incomes = incomeStore.incomes.map((item) => {
+    useIncome.incomes = useIncome.incomes.map((item) => {
       if (item.id === id) {
         return { ...item, data };
       } else {
@@ -42,6 +43,7 @@ export async function updateLocalIncome(id: number, incomeData: object) {
     });
 
     alert('Rendimento atualizado com sucesso!');
+    router.push('/carteiras');
   } catch (error: any) {
     console.log(error);
     alert(error.response.data.erro);
@@ -52,9 +54,9 @@ export async function deleteLocalIncome(id: number, incomeData: object) {
   try {
     await deleteIncome(id, incomeData);
 
-    incomeStore.incomes = incomeStore.incomes.filter((item) => item.id !== id);
+    useIncome.incomes = useIncome.incomes.filter((item) => item.id !== id);
 
-    alert('Rendimento deletado com sucesso!');
+    alert('Rendimento desativado com sucesso!');
   } catch (error: any) {
     console.log(error);
     alert(error.response.data.erro);

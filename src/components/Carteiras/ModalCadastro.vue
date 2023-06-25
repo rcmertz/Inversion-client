@@ -12,7 +12,7 @@
   });
 
   async function handleSubmit() {
-    await registerLocalWallet(form);
+    await registerLocalWallet({ ...form, descricaoCarteira: form.descricaoCarteira.toUpperCase() });
     modal.value = false;
   }
 </script>

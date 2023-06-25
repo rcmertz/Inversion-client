@@ -1,10 +1,9 @@
 <script setup lang="ts">
   import { reactive } from 'vue';
-  import { RouterLink, useRouter } from 'vue-router';
+  import { RouterLink } from 'vue-router';
   import { useIMask } from 'vue-imask';
   import { localRegister } from '@/stores/user';
 
-  const router = useRouter();
   const form = reactive({
     nome: '',
     email: '',
@@ -26,7 +25,6 @@
       cpf: unmaskedCPF.value,
       telefone: unmaskedPhone.value,
     });
-    router.push('/');
   }
 </script>
 

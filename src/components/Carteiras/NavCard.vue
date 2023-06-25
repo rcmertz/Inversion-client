@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { IWallet } from '@/interfaces/wallet';
+  import { getLocalInvestments } from '@/stores/investment';
   import { deleteLocalWallet } from '@/stores/wallet';
   import { Icon } from '@iconify/vue';
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
 
   const props = defineProps<IWallet>();
 
@@ -12,6 +13,10 @@
     await deleteLocalWallet(props.id, { ...props, ativo: false });
     modal.value = false;
   }
+
+  onMounted(async () => {
+    await getLocalInvestments();
+  });
 </script>
 
 <template>

@@ -2,13 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '@/views/Dashboard.vue';
 import Login from '@/views/Login.vue';
 import Cadastro from '@/views/Cadastro.vue';
-import Investimento from '@/views/Investimento/index.vue';
-import Rendimento from '@/views/Investimento/Rendimento.vue';
 import Carteiras from '@/views/Carteiras/index.vue';
 import Carteira from '@/views/Carteiras/Carteira.vue';
-import EditarInvestimento from '@/views/Investimento/EditarInvestimento.vue';
-import EditarRendimento from '@/views/Investimento/EditarRendimento.vue';
-import { getLocalUser, userStore } from '@/stores/user';
+import Operacao from '@/views/Operacao/index.vue';
+import Rendimento from '@/views/Operacao/Rendimento.vue';
+import EditarOperacao from '@/views/Operacao/EditarOperacao.vue';
+import EditarRendimento from '@/views/Operacao/EditarRendimento.vue';
+import { getLocalUser, useUser } from '@/stores/user';
+import { useOperation } from '@/stores/operation';
+import { useInvestment } from '@/stores/investment';
 
 const routes = [
   {
@@ -36,22 +38,6 @@ const routes = [
     },
   },
   {
-    path: '/investimento',
-    name: 'Investimento',
-    component: Investimento,
-    meta: {
-      module: 'investimento',
-    },
-  },
-  {
-    path: '/investimento/rendimento',
-    name: 'Rendimento',
-    component: Rendimento,
-    meta: {
-      module: 'investimento',
-    },
-  },
-  {
     path: '/carteiras',
     name: 'Carteiras',
     component: Carteiras,
@@ -68,19 +54,35 @@ const routes = [
     },
   },
   {
-    path: '/investimento/editar-investimento/:id',
-    name: 'Editar investimento',
-    component: EditarInvestimento,
+    path: '/operacao',
+    name: 'Operação',
+    component: Operacao,
     meta: {
-      module: 'investimento',
+      module: 'operação',
     },
   },
   {
-    path: '/investimento/editar-rendimento/:id',
+    path: '/operacao/rendimento',
+    name: 'Rendimento',
+    component: Rendimento,
+    meta: {
+      module: 'operação',
+    },
+  },
+  {
+    path: '/operacao/editar-operacao/:id',
+    name: 'Editar operação',
+    component: EditarOperacao,
+    meta: {
+      module: 'operação',
+    },
+  },
+  {
+    path: '/operacao/editar-rendimento',
     name: 'Editar rendimento',
     component: EditarRendimento,
     meta: {
-      module: 'investimento',
+      module: 'operação',
     },
   },
 ];
@@ -90,13 +92,15 @@ export const router = createRouter({
   routes,
 });
 
-// @ts-expect-error Erro
+// @ts-expect-error from não está sendo usado
 router.beforeEach(async (to, from, next) => {
+  useOperation.modal = false;
+  useInvestment.modal = false;
   await getLocalUser();
   if (to.name !== 'Cadastro' && to.name !== 'Login') {
-    if (!userStore.user) {
+    if (!useUser.user) {
       router.replace('/cadastro');
-    } else if (userStore.token === '') {
+    } else if (useUser.token === '') {
       router.replace('/login');
     } else {
       next();
