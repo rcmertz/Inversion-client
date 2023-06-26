@@ -83,11 +83,6 @@ import { router } from '@/routes/routes';
       },
     };
 
-    if (selectedOperation.value?.tipo == 'venda') {
-      alert('Não é possível cadastrar rendimento numa operação de venda.');
-      return;
-    }
-
     await updateLocalIncome(form.value.incomeId, formData);
   }
 
@@ -102,7 +97,6 @@ import { router } from '@/routes/routes';
       },
     };
 
-    console.log(formData);
     const message = confirm('Deseja remover esse rendimento?');
     if (message) {
       await deleteLocalIncome(form.value.incomeId, { ...formData, ativo: false });

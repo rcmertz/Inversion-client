@@ -6,7 +6,7 @@
   import { registerLocalIncome } from '@/stores/income';
   import { getLocalOperations, useOperation } from '@/stores/operation';
   import { formatDate } from '@/utils/formatDate';
-import { getLocalWallets } from '@/stores/wallet';
+  import { getLocalWallets } from '@/stores/wallet';
 
   const form = reactive({
     operacaoId: 0,
@@ -54,13 +54,8 @@ import { getLocalWallets } from '@/stores/wallet';
         id: form.operacaoId,
       },
     };
-    if (selectedOperation.value?.tipo == 'venda') {
-      alert('Não é possível cadastrar rendimento numa operação de venda.');
-      return;
-    }
 
     await registerLocalIncome(formData);
-    // console.log(formData);
   }
 
   onMounted(async () => {

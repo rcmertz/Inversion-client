@@ -38,11 +38,7 @@ export async function localLogin(userData: object) {
 
     router.push('/');
   } catch (error: any) {
-    alert(
-      error.response.data.erro === 'Bad credentials'
-        ? 'Email ou senha inválidos, tente novamente.'
-        : 'Ocorreu algum erro, tente novamente mais tarde.'
-    );
+    alert('Email ou senha inválidos, tente novamente.');
   }
 }
 

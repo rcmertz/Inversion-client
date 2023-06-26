@@ -31,14 +31,24 @@
 
   function getAveragePrice(operation: IOperation) {
     const tempInvestments = props.investments?.find((item) => {
-      return item.id === operation.investimento.id;
+      if (operation.tipo === 'compra') {
+        return item.id === operation.investimento.id;
+      }
+    });
+
+    const shopOperations = tempInvestments?.operacoes.filter((item) => {
+      return item.tipo === 'compra';
     });
 
     const totalValue = tempInvestments?.operacoes?.reduce((acc, curr) => {
-      return acc + curr.valor * curr.quantidade;
+      if (curr.tipo === 'compra') {
+        return acc + curr.valor * curr.quantidade;
+      } else {
+        return acc;
+      }
     }, 0);
 
-    const price = totalValue! / tempInvestments?.operacoes.length!;
+    const price = totalValue! / shopOperations?.length!;
 
     return price;
   }
@@ -80,8 +90,11 @@
         <td class="table-date">
           {{ formatDate(item.data) }}
         </td>
-        <td class="table-average">
+        <td class="table-average" v-if="!isNaN(getAveragePrice(item))">
           {{ formatCurrency(getAveragePrice(item)) }}
+        </td>
+        <td class="table-average" v-else>
+          {{ formatCurrency(0) }}
         </td>
         <td class="table-total">
           {{ formatCurrency(item.quantidade * item.valor + getOperationIncome(item)) }}

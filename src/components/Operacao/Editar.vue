@@ -16,6 +16,7 @@
     data: '',
     ativo: true,
     investimento: {
+      id: 0,
       ativo: true,
       nomeInvestimento: '',
     },
@@ -31,7 +32,7 @@
 
   const selectedInvestment = computed(() => {
     return investments.value?.find((item) => {
-      return item?.nomeInvestimento === form.value.investimento.nomeInvestimento;
+      return item?.id === form.value.investimento.id;
     });
   });
 
@@ -80,17 +81,12 @@
     <div class="form-row">
       <label for="investimento">Investimento</label>
       <div class="custom-select">
-        <select
-          name="investimento"
-          id="investimento"
-          required
-          v-model="form.investimento.nomeInvestimento"
-        >
-          <option disabled value="" class="placeholder">Selecione um investimento</option>
-          <option v-if="investments.length > 0" v-for="item in investments">
+        <select name="investimento" id="investimento" required v-model="form.investimento.id">
+          <option disabled value="0" class="placeholder">Selecione um investimento</option>
+          <option v-if="investments.length > 0" v-for="item in investments" :value="item.id">
             {{ item.nomeInvestimento }}
           </option>
-          <option v-else>0 investimentos cadastrados</option>
+          <option v-else value="0">0 investimentos cadastrados</option>
         </select>
         <Icon icon="icon-park-outline:down" class="select-icon" />
         <button type="button" class="modal-btn" @click="useOperation.modal = true">

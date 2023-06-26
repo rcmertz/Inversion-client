@@ -10,19 +10,44 @@
     Tooltip,
     Legend,
   } from 'chart.js';
-  import { chartData } from '@/data/chart';
+  import { IOperation } from '@/interfaces/operation';
+  import { computed } from 'vue';
+  import { formatDate } from '@/utils/formatDate';
+
+  interface Props {
+    operations: IOperation[];
+  }
+
+  const props = defineProps<Props>();
+
+  const operationsDate = computed(() => {
+    return props.operations.map((item) => {
+      return formatDate(item.data);
+    });
+  });
+
+  const operationsValue = computed(() => {
+    return props.operations.map((item) => {
+      return item.valor * item.quantidade;
+    });
+  });
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 </script>
 
 <template>
-  <!-- :data="{
-    labels: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    datasets: [{ label: semana, data: dados, backgroundColor: cores }],
-  }" -->
   <div class="container">
     <Line
-      :data="chartData"
+      :data="{
+        labels: operationsDate,
+        datasets: [
+          {
+            data: operationsValue,
+            label: 'Todos os dias',
+            backgroundColor: '#00ff7f',
+          },
+        ],
+      }"
       :options="{
         responsive: true,
         maintainAspectRatio: false,

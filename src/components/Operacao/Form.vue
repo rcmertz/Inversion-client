@@ -3,7 +3,7 @@
   import SectionTitle from '../SectionTitle.vue';
   import { registerLocalOperation, useOperation } from '@/stores/operation';
   import { useInvestment } from '@/stores/investment';
-  import { computed, onMounted, reactive } from 'vue';
+  import { computed, onMounted, reactive, watch } from 'vue';
   import { getLocalInvestments } from '@/stores/investment';
   import { formatCurrency } from '@/utils/formatCurrency';
 
@@ -14,6 +14,7 @@
     ativo: true,
     data: '',
     investimento: {
+      id: 0,
       ativo: true,
       nomeInvestimento: '',
     },
@@ -29,7 +30,7 @@
 
   const selectedInvestment = computed(() => {
     return investments.value?.find((item) => {
-      return item.nomeInvestimento === form.investimento.nomeInvestimento;
+      return item.id === form.investimento.id;
     });
   });
 
@@ -39,13 +40,65 @@
     }
   });
 
+  const operations = computed(() => {
+    return useOperation.operations.filter((item) => {
+      return item.investimento.id === form.investimento.id;
+    });
+  });
+
+  const operation = computed(() => {
+    return useOperation.operations.find((item) => {
+      return item.investimento.id === form.investimento.id;
+    });
+  });
+
+  const operationType = computed(() => {
+    return operation.value?.tipo === 'compra';
+  });
+
+  const operationShops = computed(() => {
+    return operations.value.reduce((acc, curr) => {
+      if (curr.tipo === 'compra') {
+        return acc + curr.quantidade;
+      } else {
+        return acc;
+      }
+    }, 0);
+  });
+
+  const operationSales = computed(() => {
+    return operations.value.reduce((acc, curr) => {
+      if (curr.tipo === 'venda') {
+        return acc + curr.quantidade;
+      } else {
+        return acc;
+      }
+    }, 0);
+  });
+
+  const finalOperationValue = computed(() => {
+    return operationShops.value - operationSales.value;
+  });
+
+  watch(form, () => {
+    console.log(finalOperationValue.value);
+  });
+
   async function handleSubmit() {
     const formData = {
       ...form,
       investimento: { ...form.investimento, id: selectedInvestment.value?.id },
     };
 
-    await registerLocalOperation(formData);
+    if (form.tipo === 'venda') {
+      if (form.quantidade > finalOperationValue.value) {
+        alert('Não é possível cadastrar uma venda com maior quantidade de compras que você tem.');
+      } else {
+        await registerLocalOperation(formData);
+      }
+    } else {
+      await registerLocalOperation(formData);
+    }
   }
 
   onMounted(async () => {
@@ -63,17 +116,12 @@
     <div class="form-row">
       <label for="investimento">Investimento</label>
       <div class="custom-select">
-        <select
-          name="investimento"
-          id="investimento"
-          required
-          v-model="form.investimento.nomeInvestimento"
-        >
-          <option disabled value="" class="placeholder">Selecione um investimento</option>
-          <option v-if="investments.length > 0" v-for="item in investments">
+        <select name="investimento" id="investimento" required v-model="form.investimento.id">
+          <option disabled value="0" class="placeholder">Selecione um investimento</option>
+          <option v-if="investments.length > 0" v-for="item in investments" :value="item.id">
             {{ item.nomeInvestimento }}
           </option>
-          <option v-else disabled value="">0 investimentos cadastrados</option>
+          <option v-else disabled value="0">0 investimentos cadastrados</option>
         </select>
         <Icon icon="icon-park-outline:down" class="select-icon" />
         <button type="button" class="modal-btn" @click="useOperation.modal = true">
@@ -150,7 +198,7 @@
         <select name="operacao" id="operacao" required v-model="form.tipo">
           <option disabled value="" class="placeholder">Selecione uma operação</option>
           <option>compra</option>
-          <option>venda</option>
+          <option v-if="operationType">venda</option>
         </select>
         <Icon icon="icon-park-outline:down" class="select-icon" />
       </div>

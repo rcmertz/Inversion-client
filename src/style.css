@@ -24,7 +24,7 @@
   --montserrat: 'Montserrat', sans-serif;
 
   /* misc */
-  --shadow: 0 4px 12px -5px rgba(0, 0, 0, 0.25);
+  --shadow: 0 4px 12px -3px rgba(0, 0, 0, 0.25);
 }
 
 body {
@@ -36,10 +36,15 @@ body {
 button,
 input {
   background-color: unset;
-  border: none;
+  border: 2px solid transparent;
   outline: none;
+  transition: border 0.3s;
 }
 
 ul {
   list-style: none;
+}
+
+input:focus {
+  border: 2px solid var(--primary);
 }
