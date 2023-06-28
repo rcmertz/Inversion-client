@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { IWallet } from '@/interfaces/wallet';
-  import { getLocalInvestments } from '@/stores/investment';
+import { router } from '@/routes/routes';
   import { deleteLocalWallet } from '@/stores/wallet';
   import { Icon } from '@iconify/vue';
-  import { onMounted, ref } from 'vue';
+  import { ref } from 'vue';
 
   const props = defineProps<IWallet>();
 
@@ -12,11 +12,8 @@
   async function handleDeletion() {
     await deleteLocalWallet(props.id, { ...props, ativo: false });
     modal.value = false;
+    router.push('/carteiras')
   }
-
-  onMounted(async () => {
-    await getLocalInvestments();
-  });
 </script>
 
 <template>

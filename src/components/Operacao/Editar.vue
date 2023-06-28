@@ -270,6 +270,7 @@
     padding: 22px 42px;
     text-decoration: none;
     color: unset;
+    border: none;
     cursor: pointer;
   }
 

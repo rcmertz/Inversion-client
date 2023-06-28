@@ -3,7 +3,7 @@
   import SectionTitle from '../SectionTitle.vue';
   import { registerLocalOperation, useOperation } from '@/stores/operation';
   import { useInvestment } from '@/stores/investment';
-  import { computed, onMounted, reactive, watch } from 'vue';
+  import { computed, onMounted, reactive } from 'vue';
   import { getLocalInvestments } from '@/stores/investment';
   import { formatCurrency } from '@/utils/formatCurrency';
 
@@ -80,10 +80,6 @@
     return operationShops.value - operationSales.value;
   });
 
-  watch(form, () => {
-    console.log(finalOperationValue.value);
-  });
-
   async function handleSubmit() {
     const formData = {
       ...form,
@@ -101,8 +97,8 @@
     }
   }
 
-  onMounted(async () => {
-    await getLocalInvestments();
+  onMounted(() => {
+    getLocalInvestments();
   });
 </script>
 
@@ -311,6 +307,7 @@
     padding: 22px 42px;
     text-decoration: none;
     color: unset;
+    border: none;
     cursor: pointer;
   }
 

@@ -10,9 +10,9 @@
   import { IIncome } from '@/interfaces/income';
 
   interface Props {
-    incomes: IIncome[];
-    operations: IOperation[];
     investments: IInvestment[];
+    operations: IOperation[];
+    incomes: IIncome[];
   }
 
   const props = defineProps<Props>();
@@ -36,7 +36,7 @@
       }
     });
 
-    const shopOperations = tempInvestments?.operacoes.filter((item) => {
+    const shopOperations = tempInvestments?.operacoes?.filter((item) => {
       return item.tipo === 'compra';
     });
 
@@ -63,7 +63,7 @@
 </script>
 
 <template>
-  <div class="container" v-if="operations.length > 0">
+  <div class="container">
     <table>
       <tr class="table-head">
         <th v-for="item in tableHead" :key="item.id">
@@ -71,7 +71,7 @@
         </th>
         <th>Ações</th>
       </tr>
-      <tr v-for="item in operations.sort((a, b) => a?.id - b?.id)" class="table-rows">
+      <tr v-for="item in operations" class="table-rows">
         <td class="table-name">
           {{ item.investimento.nomeInvestimento }}
         </td>
@@ -114,18 +114,15 @@
       </tr>
     </table>
   </div>
-  <div v-else class="disclaim">
-    <h2>Essa carteira ainda não tem operações...</h2>
-    <RouterLink to="/operacao" class="link">Clique aqui para cadastrar!</RouterLink>
-  </div>
 </template>
 
 <style scoped>
   .container {
-    background-color: #fff;
     overflow-x: auto;
-    height: 580px;
     overflow-y: auto;
+    height: 420px;
+    max-height: 500px;
+    background-color: #fff;
     margin-bottom: 36px;
   }
 
@@ -197,6 +194,7 @@
     border-radius: 10px;
     padding: 8px;
     cursor: pointer;
+    border: none;
   }
 
   .edit-btn {
@@ -229,13 +227,5 @@
     z-index: 1;
     background-color: #000;
     opacity: 0.3;
-  }
-
-  .disclaim {
-    color: #fff;
-  }
-
-  .link {
-    color: var(--primary);
   }
 </style>

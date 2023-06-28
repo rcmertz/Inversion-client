@@ -12,3 +12,27 @@ export interface IOperation {
   data: string;
   rendimentos: IIncome[];
 }
+
+export interface IGetOperations {
+  size: number;
+  carteira: number;
+}
+
+export interface IGetOperationsByInvestment {
+  size: number;
+  id: number;
+}
+
+export interface IGetOperationsByDate {
+  size: number;
+  carteira: number;
+  start: string;
+  end: string;
+}
+
+export interface IGetOperationsByDateAndInvestment {
+  size: number;
+  id: number;
+  start: string;
+  end: string;
+}

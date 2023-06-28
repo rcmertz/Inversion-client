@@ -1,7 +1,17 @@
-import { IOperation } from '@/interfaces/operation';
+import {
+  IGetOperations,
+  IGetOperationsByDate,
+  IGetOperationsByDateAndInvestment,
+  IGetOperationsByInvestment,
+  IOperation,
+} from '@/interfaces/operation';
 import {
   deleteOperation,
   getAllOperations,
+  getOperationsByDate,
+  getOperationsByDateAndInvestment,
+  getOperationsByInvestment,
+  getOperationsByWallet,
   getSingleOperation,
   registerOperation,
   updateOperation,
@@ -13,6 +23,13 @@ export const useOperation = reactive({
   modal: false,
   operations: [] as IOperation[],
   operation: undefined as IOperation | undefined,
+  page: 0,
+  totalPages: 0,
+  investmentId: 0,
+  dates: {
+    start: '',
+    end: '',
+  },
 });
 
 export async function registerLocalOperation(operationData: object) {
@@ -33,10 +50,91 @@ export async function getLocalOperations() {
     const { data } = await getAllOperations();
     await getLocalIncomes();
 
-    await data.content.map((item: IOperation) => {
+    data.content.map((item: IOperation) => {
       item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
     });
 
+    useOperation.totalPages = data.totalPages;
+    useOperation.operations = data.content;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getLocalOperationsByWallet({ size, carteira }: IGetOperations) {
+  try {
+    const { data } = await getOperationsByWallet(size, useOperation.page, carteira);
+    await getLocalIncomes();
+
+    data.content.map((item: IOperation) => {
+      item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
+    });
+
+    useOperation.totalPages = data.totalPages;
+    useOperation.operations = data.content;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getLocalOperationsByInvestment({ size, id }: IGetOperationsByInvestment) {
+  try {
+    const { data } = await getOperationsByInvestment(size, useOperation.page, id);
+    await getLocalIncomes();
+
+    data.content.map((item: IOperation) => {
+      item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
+    });
+
+    useOperation.totalPages = data.totalPages;
+    useOperation.operations = data.content;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getLocalOperationsByDate({
+  size,
+  carteira,
+  start,
+  end,
+}: IGetOperationsByDate) {
+  try {
+    const { data } = await getOperationsByDate(size, useOperation.page, carteira, start, end);
+    await getLocalIncomes();
+
+    data.content.map((item: IOperation) => {
+      item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
+    });
+
+    useOperation.totalPages = data.totalPages;
+    useOperation.operations = data.content;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getLocalOperationsByDateAndInvestment({
+  size,
+  id,
+  start,
+  end,
+}: IGetOperationsByDateAndInvestment) {
+  try {
+    const { data } = await getOperationsByDateAndInvestment(
+      size,
+      useOperation.page,
+      id,
+      start,
+      end
+    );
+    await getLocalIncomes();
+
+    data.content.map((item: IOperation) => {
+      item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
+    });
+
+    useOperation.totalPages = data.totalPages;
     useOperation.operations = data.content;
   } catch (error) {
     console.log(error);

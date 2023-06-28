@@ -21,7 +21,9 @@
   });
 
   const selectedWallet = computed(() => {
-    return wallets.value.find((item) => item.ativo && item.descricaoCarteira === form.carteira.descricaoCarteira);
+    return wallets.value.find((item) => {
+      return item.ativo && item.descricaoCarteira === form.carteira.descricaoCarteira;
+    });
   });
 
   async function handleSubmit() {

@@ -4,10 +4,9 @@
   import SectionTitle from '../../SectionTitle.vue';
   import { formatCurrency } from '@/utils/formatCurrency';
   import { deleteLocalIncome, updateLocalIncome, useIncome } from '@/stores/income';
-  import { getLocalOperations, useOperation } from '@/stores/operation';
+  import { getLocalOperation, getLocalOperations, useOperation } from '@/stores/operation';
   import { formatDate } from '@/utils/formatDate';
-  import { getSingleOperation } from '@/services/operation';
-import { router } from '@/routes/routes';
+  import { router } from '@/routes/routes';
 
   const form = ref({
     incomeId: 0,
@@ -104,9 +103,9 @@ import { router } from '@/routes/routes';
     }
   }
 
-  onMounted(async () => {
-    await getLocalOperations();
-    await getSingleOperation(form.value.operacaoId);
+  onMounted(() => {
+    getLocalOperations();
+    getLocalOperation(form.value.operacaoId);
   });
 </script>
 
@@ -216,8 +215,8 @@ import { router } from '@/routes/routes';
     </div>
 
     <div class="buttons">
-      <button type="button" @click="handleDeletion">Deletar</button>
-      <RouterLink to="/operacao">Operação</RouterLink>
+      <button type="button" @click="handleDeletion" :disabled="form.incomeId === 0">Deletar</button>
+      <button type="button" @click="$router.back()">Operação</button>
       <button type="submit">Confirmar</button>
     </div>
   </form>
@@ -316,6 +315,11 @@ import { router } from '@/routes/routes';
     background-color: var(--dashboard-status-loss);
   }
 
+  .buttons > button:first-child:disabled {
+    opacity: 80%;
+    cursor: not-allowed;
+  }
+
   .buttons > * {
     background-color: var(--primary-alt);
     font-family: var(--inter);
@@ -327,6 +331,7 @@ import { router } from '@/routes/routes';
     text-decoration: none;
     color: unset;
     cursor: pointer;
+    border: none;
   }
 
   @media (max-width: 1400px) {

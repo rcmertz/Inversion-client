@@ -89,7 +89,6 @@
     background-color: var(--input);
     border-radius: 8px;
     padding: 24px;
-    border: none;
     outline: none;
     font-size: 18px;
     font-family: var(--montserrat);

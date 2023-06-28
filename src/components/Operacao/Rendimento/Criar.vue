@@ -58,9 +58,9 @@
     await registerLocalIncome(formData);
   }
 
-  onMounted(async () => {
-    await getLocalWallets();
-    await getLocalOperations();
+  onMounted(() => {
+    getLocalWallets();
+    getLocalOperations();
   });
 </script>
 
@@ -261,6 +261,7 @@
     text-decoration: none;
     color: unset;
     cursor: pointer;
+    border: none;
   }
 
   @media (max-width: 1400px) {

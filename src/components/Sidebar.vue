@@ -31,7 +31,6 @@
       >
         <Icon icon="ooui:user-avatar" class="user-icon" />
         <p v-if="isOpen && useUser.user">{{ useUser.user.nome }}</p>
-        <p v-else-if="isOpen">user@gmail.com</p>
       </div>
       <div class="links-list">
         <RouterLink

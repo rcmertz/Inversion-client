@@ -84,9 +84,9 @@
     alert('Investimento desativado com sucesso!');
   }
 
-  onMounted(async () => {
-    await getLocalInvestments();
-    await getLocalWallets();
+  onMounted(() => {
+    getLocalInvestments();
+    getLocalWallets();
   });
 </script>
 
