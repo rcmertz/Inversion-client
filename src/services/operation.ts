@@ -8,7 +8,7 @@ export function registerOperation(data: object) {
 }
 
 export function getAllOperations() {
-  return request('/operacao/findAll', {
+  return request('/operacao/findAll?size=500000000', {
     method: 'GET',
   });
 }
