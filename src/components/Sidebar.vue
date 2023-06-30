@@ -7,6 +7,7 @@
 
   const router = useRouter();
 
+  // logout
   async function handleLogout() {
     await localLogout();
     router.push('/login');

@@ -6,6 +6,7 @@
   import { registerLocalInvestment } from '@/stores/investment';
   import { computed, onMounted, reactive } from 'vue';
 
+  // valores enviados ao backend
   const form = reactive({
     nomeInvestimento: '',
     valorInvestimento: 0,
@@ -16,10 +17,12 @@
     },
   });
 
+  // filtra carteiras ativas
   const wallets = computed(() => {
     return useWallet.wallets.filter((item) => item.ativo);
   });
 
+  // carteira selecionada
   const selectedWallet = computed(() => {
     return wallets.value.find((item) => {
       return item.ativo && item.descricaoCarteira === form.carteira.descricaoCarteira;
@@ -41,6 +44,7 @@
     useOperation.modal = false;
   }
 
+  // pega carteiras quando o componente renderizar
   onMounted(() => {
     getLocalWallets();
   });

@@ -4,6 +4,7 @@
   import { useIMask } from 'vue-imask';
   import { localRegister } from '@/stores/user';
 
+  // valores enviados ao backend
   const form = reactive({
     nome: '',
     email: '',
@@ -11,10 +12,12 @@
     ativo: true,
   });
 
+  // cria máscara no input e retorna valor sem máscara
   const { el: cpf, unmasked: unmaskedCPF } = useIMask({
     mask: '000.000.000-00',
   });
 
+  // cria máscara no input e retorna valor sem máscara
   const { el: phone, unmasked: unmaskedPhone } = useIMask({
     mask: '(00) 00000-0000',
   });

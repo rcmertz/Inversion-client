@@ -1,5 +1,7 @@
 import { request } from './makeRequest';
 
+// funções para fazer requisições nas rotas de carteira
+
 export function registerWallet(data: object) {
   return request('/carteiras', {
     method: 'POST',
@@ -8,7 +10,7 @@ export function registerWallet(data: object) {
 }
 
 export function getAllWallets() {
-  return request('/carteiras', {
+  return request('/carteiras?size=500000000', {
     method: 'GET',
   });
 }

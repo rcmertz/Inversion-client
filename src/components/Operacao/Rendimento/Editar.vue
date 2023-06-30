@@ -8,6 +8,7 @@
   import { formatDate } from '@/utils/formatDate';
   import { router } from '@/routes/routes';
 
+  // valores enviados ao backend
   const form = ref({
     incomeId: 0,
     operacaoId: 0,
@@ -25,32 +26,44 @@
     },
   });
 
+  // calcula valor final e faz a máscara no input
   const valorFinal = computed(() => {
     return formatCurrency(form.value.quantidade * form.value.preco_un);
   });
 
+  // filtra operações ativas atreladas aos investimentos ativos
   const operations = computed(() => {
     return useOperation.operations.filter((item) => item.ativo && item.investimento.ativo);
   });
 
+  const operationsWithIncomes = computed(() => {
+    return operations.value.filter((item) => {
+      return item.rendimentos.length > 0;
+    });
+  });
+
+  // filtra rendimentos atrealods a operação selecionada
   const incomes = computed(() => {
     return useIncome.incomes.filter((item) => {
       return item.operacao.id === form.value.operacaoId;
     });
   });
 
+  // rendimento selecionado
   const selectedIncome = computed(() => {
     return incomes.value.find((item) => {
       return item.id === form.value.incomeId;
     });
   });
 
+  // operação selecionado
   const selectedOperation = computed(() => {
     return operations.value.find((item) => {
       return item.id === form.value.operacaoId;
     });
   });
 
+  // carteira selecionada
   const selectedWallet = computed(() => {
     return operations.value.find((item) => {
       return (
@@ -60,10 +73,13 @@
     });
   });
 
+  // nome da carteira selecionada
   const walletName = computed(() => {
     return selectedWallet.value?.investimento.carteira.descricaoCarteira;
   });
 
+  // quando o rendimento for selecionado,
+  // atualiza os valores que serão enviados pro backend
   watch(selectedIncome, async (value) => {
     form.value.quantidade = value!.quantidade;
     form.value.preco_un = value!.preco_un;
@@ -89,6 +105,7 @@
     const formData = {
       ...form.value,
       id: form.value.incomeId,
+      ativo: false,
       operacao: {
         ...form.value.operacao,
         id: form.value.operacaoId,
@@ -98,14 +115,15 @@
 
     const message = confirm('Deseja remover esse rendimento?');
     if (message) {
-      await deleteLocalIncome(form.value.incomeId, { ...formData, ativo: false });
+      await deleteLocalIncome(form.value.incomeId, formData);
       router.push('/carteiras');
     }
   }
 
-  onMounted(() => {
-    getLocalOperations();
-    getLocalOperation(form.value.operacaoId);
+  // pega operações e operação quando o componente renderizar
+  onMounted(async () => {
+    await getLocalOperations();
+    await getLocalOperation(form.value.operacaoId);
   });
 </script>
 
@@ -121,8 +139,13 @@
       <div class="custom-select">
         <select name="descricao" id="descricao" required v-model="form.operacaoId">
           <option disabled value="0" class="placeholder">Selecione uma operação</option>
-          <option v-if="operations.length > 0" v-for="item in operations" :value="item.id">
-            {{ item.investimento.nomeInvestimento }} - {{ formatDate(item.data) }} - {{ item.tipo }}
+          <option
+            v-if="operationsWithIncomes.length > 0"
+            v-for="item in operationsWithIncomes"
+            :value="item!.id"
+          >
+            {{ item!.investimento.nomeInvestimento }} - {{ formatDate(item!.data) }} -
+            {{ item!.tipo }} - {{ item!.id }}
           </option>
           <option disabled value="0" v-else>0 investimentos cadastrados</option>
         </select>

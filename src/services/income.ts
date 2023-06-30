@@ -1,5 +1,7 @@
 import { request } from './makeRequest';
 
+// funções para fazer requisições nas rotas de rendimentos
+
 export function registerIncome(data: object) {
   return request('/rendimentos', {
     method: 'POST',
@@ -8,7 +10,7 @@ export function registerIncome(data: object) {
 }
 
 export function getAllIncomes() {
-  return request('/rendimentos', {
+  return request('/rendimentos?size=500000000', {
     method: 'GET',
   });
 }

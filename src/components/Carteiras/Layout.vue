@@ -3,10 +3,12 @@
   import NavCard from './NavCard.vue';
   import { computed, onMounted } from 'vue';
 
+  // filtra carteiras ativas
   const activeWallets = computed(() => {
     return useWallet.wallets.filter((item) => item.ativo);
   });
 
+  // pega carteiras quando componente renderizar
   onMounted(() => {
     getLocalWallets();
   });
@@ -15,7 +17,7 @@
 <template>
   <section>
     <nav v-if="activeWallets.length > 0">
-      <NavCard v-for="item in activeWallets" :="item" />
+      <NavCard v-for="item in activeWallets" :item="item" />
     </nav>
     <h1 v-else>0 carteiras cadastradas...</h1>
 

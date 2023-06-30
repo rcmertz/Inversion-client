@@ -17,29 +17,21 @@
 
   const props = defineProps<Props>();
 
-  function getOperationIncome(operation: IOperation) {
-    const tempIncomes = props.incomes.filter((item) => {
-      return item.operacao.id === operation.id;
-    });
-
-    const totalValue = tempIncomes.reduce((acc, curr) => {
-      return acc + curr.preco_un * curr.quantidade;
-    }, 0);
-
-    return totalValue;
-  }
-
+  // pegar preço médio
   function getAveragePrice(operation: IOperation) {
+    // encontra investimento que a operação está atrelada
     const tempInvestments = props.investments?.find((item) => {
       if (operation.tipo === 'compra') {
         return item.id === operation.investimento.id;
       }
     });
 
+    // encontra operações de compra
     const shopOperations = tempInvestments?.operacoes?.filter((item) => {
       return item.tipo === 'compra';
     });
 
+    // multiplica valor e quantidade das operações de compra
     const totalValue = tempInvestments?.operacoes?.reduce((acc, curr) => {
       if (curr.tipo === 'compra') {
         return acc + curr.valor * curr.quantidade;
@@ -48,11 +40,28 @@
       }
     }, 0);
 
+    // calcula a média
     const price = totalValue! / shopOperations?.length!;
 
     return price;
   }
 
+  // pegar rendimentos da operação
+  function getOperationIncome(operation: IOperation) {
+    // filtra rendimentos atrelados a operação
+    const tempIncomes = props.incomes?.filter((item) => {
+      return item.operacao.id === operation.id;
+    });
+
+    // multiplica preço unitário e quantidade
+    const totalValue = tempIncomes.reduce((acc, curr) => {
+      return acc + curr.preco_un * curr.quantidade;
+    }, 0);
+
+    return totalValue;
+  }
+
+  // desativa operação
   async function handleDeletion(id: number, item: IOperation) {
     const message = confirm('Tem certeza que deseja remover essa operação?');
     if (message) {
@@ -71,7 +80,7 @@
         </th>
         <th>Ações</th>
       </tr>
-      <tr v-for="item in operations" class="table-rows">
+      <tr v-for="item in operations" :key="item.id" class="table-rows">
         <td class="table-name">
           {{ item.investimento.nomeInvestimento }}
         </td>

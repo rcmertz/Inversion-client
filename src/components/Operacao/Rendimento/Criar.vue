@@ -8,6 +8,7 @@
   import { formatDate } from '@/utils/formatDate';
   import { getLocalWallets } from '@/stores/wallet';
 
+  // valores enviados ao backend
   const form = reactive({
     operacaoId: 0,
     quantidade: 0,
@@ -23,20 +24,24 @@
     },
   });
 
+  // calcula valor final e faz a máscara no input
   const valorFinal = computed(() => {
     return formatCurrency(form.quantidade * form.preco_un);
   });
 
+  // filtra operações ativas atreladas aos investimentos ativos
   const operations = computed(() => {
     return useOperation.operations.filter((item) => item.ativo && item.investimento.ativo);
   });
 
+  // operação selecionada
   const selectedOperation = computed(() => {
     return operations.value.find((item) => {
       return item.id === form.operacaoId;
     });
   });
 
+  // carteira selecionada
   const selectedWallet = computed(() => {
     return operations.value.find((item) => {
       return (
@@ -58,6 +63,7 @@
     await registerLocalIncome(formData);
   }
 
+  // pega carteiras e operações quando o componente renderizar
   onMounted(() => {
     getLocalWallets();
     getLocalOperations();
@@ -77,7 +83,8 @@
         <select name="descricao" id="descricao" required v-model="form.operacaoId">
           <option disabled value="0" class="placeholder">Selecione uma operação</option>
           <option v-if="operations.length > 0" v-for="item in operations" :value="item.id">
-            {{ item.investimento.nomeInvestimento }} - {{ formatDate(item.data) }} - {{ item.tipo }}
+            {{ item.investimento.nomeInvestimento }} - {{ formatDate(item.data) }} -
+            {{ item.tipo }} - {{ item.id }}
           </option>
           <option disabled value="0" v-else>0 investimentos cadastrados</option>
         </select>

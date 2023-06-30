@@ -9,6 +9,7 @@
   import { useRoute } from 'vue-router';
   import { router } from '@/routes/routes';
 
+  // valores enviados ao backend
   const form = ref({
     quantidade: 0,
     valor: 0,
@@ -22,28 +23,34 @@
     },
   });
 
+  // calcula valor final e faz a máscara no input
   const valorFinal = computed(() => {
     return formatCurrency(form.value.quantidade * form.value.valor);
   });
 
+  // filtra investimentos ativos
   const investments = computed(() => {
     return useInvestment.investments?.filter((item) => item.ativo);
   });
 
+  // investimento selecionado
   const selectedInvestment = computed(() => {
     return investments.value?.find((item) => {
       return item?.id === form.value.investimento.id;
     });
   });
 
+  // carteira selecionada
   const selectedWallet = computed(() => {
     return selectedInvestment.value?.carteira;
   });
 
+  // nome da carteira selecionada
   const walletName = computed(() => {
     return selectedWallet.value?.descricaoCarteira;
   });
 
+  // id da carteira selecionada
   const walletId = computed(() => {
     return selectedWallet.value?.id;
   });
@@ -57,13 +64,20 @@
       },
     };
 
-    // console.log(formData);
-    await updateLocalOperation(Number(route.params.id), formData);
-    router.push('/carteiras/' + selectedWallet.value?.id);
+    // se não tiver investimento selecionado
+    // estoura um erro e retorna
+    if (form.value.investimento.id === 0) {
+      alert('Por favor, selecione um investimento.');
+    } else {
+      await updateLocalOperation(Number(route.params.id), formData);
+      router.push('/carteiras/' + selectedWallet.value?.id);
+    }
   }
 
   const route = useRoute();
 
+  // pega operação e investimentos quando o componente renderizar e 
+  // atualiza dos valores a serem enviados ao backend
   onMounted(async () => {
     await getLocalOperation(Number(route.params.id));
     await getLocalInvestments();

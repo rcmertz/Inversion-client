@@ -1,16 +1,8 @@
 <script setup lang="ts">
   import { IInvestment } from '@/interfaces/investment';
-  import { router } from '@/routes/routes';
-  import { getLocalInvestments } from '@/stores/investment';
-  import {
-    getLocalOperationsByDate,
-    getLocalOperationsByDateAndInvestment,
-    getLocalOperationsByInvestment,
-    getLocalOperationsByWallet,
-    useOperation,
-  } from '@/stores/operation';
+  import { useOperation } from '@/stores/operation';
   import { Icon } from '@iconify/vue';
-  import { computed, watch, watchEffect } from 'vue';
+  import { computed, watch } from 'vue';
   import { useRoute } from 'vue-router';
 
   interface Props {
@@ -21,12 +13,14 @@
 
   const route = useRoute();
 
+  // filtra investimentos atrelados à carteira
   const investmentsByWallet = computed(() => {
     return props.investments.filter((item) => {
       return item.carteira.id === Number(route.params.id);
     });
   });
 
+  // zera a página quando os filtros forem alterados
   watch(
     [() => useOperation.investmentId, () => useOperation.dates.start, () => useOperation.dates.end],
     () => {
@@ -34,76 +28,12 @@
     }
   );
 
-  watchEffect(async () => {
-    if (
-      useOperation.investmentId > 0 &&
-      useOperation.dates.start !== '' &&
-      useOperation.dates.end !== ''
-    ) {
-      await getLocalOperationsByDateAndInvestment({
-        size: 10,
-        end: useOperation.dates.end,
-        start: useOperation.dates.start,
-        id: useOperation.investmentId,
-      });
-
-      if (useOperation.operations.length === 0) {
-        alert('Não existem operações nesse período.');
-        router.go(0);
-        return;
-      }
-    } else if (useOperation.dates.start !== '' && useOperation.dates.end !== '') {
-      await getLocalOperationsByDate({
-        size: 10,
-        end: useOperation.dates.end,
-        start: useOperation.dates.start,
-        carteira: Number(route.params.id),
-      });
-
-      if (useOperation.operations.length === 0) {
-        alert('Não existem operações nesse período.');
-        router.go(0);
-        return;
-      }
-    } else if (
-      useOperation.investmentId === 0 &&
-      useOperation.dates.start !== '' &&
-      useOperation.dates.end !== ''
-    ) {
-      await getLocalOperationsByDate({
-        size: 10,
-        end: useOperation.dates.end,
-        start: useOperation.dates.start,
-        carteira: Number(route.params.id),
-      });
-
-      if (useOperation.operations.length === 0) {
-        alert('Não existem operações nesse período.');
-        router.go(0);
-        return;
-      }
-    } else if (useOperation.investmentId > 0) {
-      if (useOperation.dates.start !== '' && useOperation.dates.end !== '') {
-        await getLocalOperationsByDateAndInvestment({
-          size: 10,
-          end: useOperation.dates.end,
-          start: useOperation.dates.start,
-          id: useOperation.investmentId,
-        });
-      } else {
-        await getLocalOperationsByInvestment({ size: 10, id: useOperation.investmentId });
-      }
-
-      if (useOperation.operations.length === 0) {
-        alert('Não existem operações nesse período.');
-        router.go(0);
-        return;
-      }
-    } else {
-      await getLocalInvestments();
-      await getLocalOperationsByWallet({ size: 10, carteira: Number(route.params.id) });
-    }
-  });
+  // limpa filtros
+  function clearValues() {
+    useOperation.investmentId = 0;
+    useOperation.dates.start = '';
+    useOperation.dates.end = '';
+  }
 </script>
 
 <template>
@@ -111,7 +41,7 @@
     <div class="custom-select">
       <label>Filtrar por investimento</label>
       <select class="search-select" v-model="useOperation.investmentId">
-        <option value="0">Todos os investimentos</option>
+        <option :value="0">Todos os investimentos</option>
         <option v-for="item in investmentsByWallet" :value="item.id">
           {{ item.nomeInvestimento }}
         </option>
@@ -123,6 +53,13 @@
       <div class="dates">
         <input type="datetime-local" name="dataStart" v-model="useOperation.dates.start" />
         <input type="datetime-local" name="dataEnd" v-model="useOperation.dates.end" />
+        <button
+          type="button"
+          @click="clearValues"
+          v-if="useOperation.investmentId || useOperation.dates.start || useOperation.dates.end"
+        >
+          Limpar
+        </button>
       </div>
     </div>
   </div>
@@ -173,7 +110,7 @@
   }
 
   button {
-    background-color: var(--primary);
+    background-color: var(--dashboard-status-loss);
     height: 62px;
     padding: 0px 42px;
     border-radius: 4px;
@@ -182,11 +119,6 @@
     text-transform: uppercase;
     font-family: var(--inter);
     cursor: pointer;
-  }
-
-  button:disabled {
-    opacity: 80%;
-    cursor: not-allowed;
   }
 
   .custom-select {

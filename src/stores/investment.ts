@@ -10,12 +10,25 @@ import {
 import { reactive } from 'vue';
 import { deleteLocalOperation, getLocalOperations, useOperation } from './operation';
 
+// store de investimento
 export const useInvestment = reactive({
   investments: [] as IInvestment[],
   investment: null as IInvestment | null,
   modal: false,
 });
 
+// pegar investimentos e salvar resposta na store
+export async function getLocalInvestmentsOnly() {
+  try {
+    const { data } = await getAllInvestments();
+
+    useInvestment.investments = data.content;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// pegar investimentos e operações atreladas e salvar resposta na store
 export async function getLocalInvestments() {
   try {
     const { data } = await getAllInvestments();
@@ -33,6 +46,7 @@ export async function getLocalInvestments() {
   }
 }
 
+// pegar investimento e salvar resposta na store
 export async function getLocalInvestment(id: number) {
   try {
     const { data } = await getSingleInvestment(id);
@@ -43,6 +57,7 @@ export async function getLocalInvestment(id: number) {
   }
 }
 
+// cadastrar investimento e atualizar a store automaticamente
 export async function registerLocalInvestment(investmentData: object) {
   try {
     const { data } = await registerInvestment(investmentData);
@@ -60,6 +75,7 @@ export async function registerLocalInvestment(investmentData: object) {
   }
 }
 
+// editar investimento e atualizar a store automaticamente
 export async function updateLocalInvestment(id: number, investmentData: object) {
   try {
     const { data } = await updateInvestment(id, investmentData);
@@ -79,10 +95,12 @@ export async function updateLocalInvestment(id: number, investmentData: object) 
   }
 }
 
+// desativar investimento e atualizar a store automaticamente
 export async function deleteLocalInvestment(id: number, investmentData: object) {
   try {
     await deleteInvestment(id, investmentData);
 
+    // desativar operações atreladas
     useOperation.operations.forEach(async (item) => {
       if (item.investimento.id === id) {
         await deleteLocalOperation(item.id, { ...item, ativo: false });

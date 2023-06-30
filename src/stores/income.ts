@@ -3,10 +3,12 @@ import { router } from '@/routes/routes';
 import { deleteIncome, getAllIncomes, registerIncome, updateIncome } from '@/services/income';
 import { reactive } from 'vue';
 
+// store de rendimento
 export const useIncome = reactive({
   incomes: [] as IIncome[],
 });
 
+// pegar rendimentos e salvar resposta na store
 export async function getLocalIncomes() {
   try {
     const { data } = await getAllIncomes();
@@ -17,6 +19,7 @@ export async function getLocalIncomes() {
   }
 }
 
+// cadastrar rendimento e atualizar a store automaticamente
 export async function registerLocalIncome(incomeData: object) {
   try {
     const { data } = await registerIncome(incomeData);
@@ -30,6 +33,7 @@ export async function registerLocalIncome(incomeData: object) {
   }
 }
 
+// editar rendimento e atualizar a store automaticamente
 export async function updateLocalIncome(id: number, incomeData: object) {
   try {
     const { data } = await updateIncome(id, incomeData);
@@ -50,6 +54,7 @@ export async function updateLocalIncome(id: number, incomeData: object) {
   }
 }
 
+// desativar rendimento e atualizar a store automaticamente
 export async function deleteLocalIncome(id: number, incomeData: object) {
   try {
     await deleteIncome(id, incomeData);

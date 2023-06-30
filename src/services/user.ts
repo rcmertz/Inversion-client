@@ -1,5 +1,7 @@
 import { request } from './makeRequest';
 
+// funções para fazer requisições nas rotas de usuário
+
 export function register(data: object) {
   return request('/usuarios/cadastro', {
     method: 'POST',

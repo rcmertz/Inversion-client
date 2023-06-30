@@ -1,26 +1,27 @@
 <script setup lang="ts">
   import { IWallet } from '@/interfaces/wallet';
-import { router } from '@/routes/routes';
+  import { router } from '@/routes/routes';
   import { deleteLocalWallet } from '@/stores/wallet';
   import { Icon } from '@iconify/vue';
   import { ref } from 'vue';
 
-  const props = defineProps<IWallet>();
+  const props = defineProps<{ item: IWallet }>();
 
   const modal = ref(false);
 
+  // pega carteiras quando componente renderizar
   async function handleDeletion() {
-    await deleteLocalWallet(props.id, { ...props, ativo: false });
+    await deleteLocalWallet(props.item.id, { ...props, ativo: false });
     modal.value = false;
-    router.push('/carteiras')
+    router.push('/carteiras');
   }
 </script>
 
 <template>
   <div class="link-container">
-    <RouterLink :to="'/carteiras/' + props.id" class="nav-link" active-class="nav-link active">
+    <RouterLink :to="'/carteiras/' + item.id" class="nav-link" active-class="nav-link active">
       <Icon icon="ooui:user-avatar" class="link-icon" />
-      <p>{{ props.descricaoCarteira }}</p>
+      <p>{{ item.descricaoCarteira }}</p>
     </RouterLink>
     <button type="button" @click="modal = true" class="trash-btn">
       <Icon icon="fa6-solid:trash-can" class="trash-icon" />

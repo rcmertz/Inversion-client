@@ -1,186 +1,178 @@
 <script setup lang="ts">
-import { router } from '@/routes/routes';
-import {
-  getLocalOperationsByDate,
-  getLocalOperationsByDateAndInvestment,
-  getLocalOperationsByInvestment,
-  getLocalOperationsByWallet,
-  useOperation,
-} from '@/stores/operation';
-import { Icon } from '@iconify/vue';
-import { computed, reactive, watch, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+  import { router } from '@/routes/routes';
+  import { changePage, useOperation } from '@/stores/operation';
+  import { Icon } from '@iconify/vue';
+  import { reactive, watchEffect } from 'vue';
 
-const pages = computed(() => {
-  return Array.from({ length: useOperation.totalPages }, (_item, index) => {
-    return index;
+  interface Props {
+    pages: number[];
+  }
+
+  const props = defineProps<Props>();
+
+  const page = reactive({
+    current: 1,
+    prev: 0,
+    next: 2,
   });
-});
 
-const route = useRoute();
-
-const values = reactive({
-  current: 1,
-  prev: 0,
-  next: 2,
-  last: useOperation.totalPages,
-});
-
-watch(
-  () => useOperation.page,
-  (value) => {
-    values.current = value + 1;
-    values.prev = value;
-    values.next = value + 2;
-    values.last = useOperation.totalPages;
-  }
-);
-
-function prevPage() {
-  let newPage = useOperation.page - 1;
-  if (newPage < 0) {
-    newPage = pages.value.length - 1;
-  }
-
-  useOperation.page = newPage;
-}
-
-function nextPage() {
-  let newPage = useOperation.page + 1;
-  if (newPage >= pages.value.length) {
-    newPage = 0;
-  }
-
-  useOperation.page = newPage;
-}
-
-router.beforeEach((_to) => {
-  useOperation.investmentId = 0;
-  useOperation.dates.start = '';
-  useOperation.dates.end = '';
-});
-
-watchEffect(async () => {
-  if (
-    useOperation.investmentId > 0 &&
-    useOperation.dates.start !== '' &&
-    useOperation.dates.end !== ''
-  ) {
-    await getLocalOperationsByDateAndInvestment({
-      size: 10,
-      end: useOperation.dates.end,
-      start: useOperation.dates.start,
-      id: useOperation.investmentId,
-    });
-  } else if (useOperation.dates.start !== '' && useOperation.dates.end !== '') {
-    await getLocalOperationsByDate({
-      size: 10,
-      end: useOperation.dates.end,
-      start: useOperation.dates.start,
-      carteira: Number(route.params.id),
-    });
-  } else if (
-    useOperation.investmentId === 0 &&
-    useOperation.dates.start !== '' &&
-    useOperation.dates.end !== ''
-  ) {
-    await getLocalOperationsByDate({
-      size: 10,
-      end: useOperation.dates.end,
-      start: useOperation.dates.start,
-      carteira: Number(route.params.id),
-    });
-  } else if (useOperation.investmentId > 0) {
-    if (useOperation.dates.start !== '' && useOperation.dates.end !== '') {
-      await getLocalOperationsByDateAndInvestment({
-        size: 10,
-        end: useOperation.dates.end,
-        start: useOperation.dates.start,
-        id: useOperation.investmentId,
-      });
-    } else {
-      await getLocalOperationsByInvestment({ size: 10, id: useOperation.investmentId });
+  function prevPage() {
+    let newPage = useOperation.page - 1;
+    if (newPage < 0) {
+      newPage = props.pages.length - 1;
     }
-  } else {
-    await getLocalOperationsByWallet({ size: 10, carteira: Number(route.params.id) });
+
+    changePage(newPage);
   }
-});
+
+  function nextPage() {
+    let newPage = useOperation.page + 1;
+    if (newPage >= props.pages.length) {
+      newPage = 0;
+    }
+
+    changePage(newPage);
+  }
+
+  // ao mudar de rota,
+  // zera os valores de busca
+  router.beforeEach((_to) => {
+    useOperation.investmentId = 0;
+    useOperation.dates.start = '';
+    useOperation.dates.end = '';
+  });
+
+  // atualiza a paginação quando algum dos
+  // valores dentro do callback mudar
+  watchEffect(() => {
+    page.current = useOperation.page + 1;
+    page.prev = useOperation.page;
+    page.next = useOperation.page + 2;
+  });
 </script>
 
 <template>
-  <div class="btns-container" v-if="pages.length > 1">
+  <div class="btns-container">
+    <button type="button" class="page-btn" @click="useOperation.page = 0" v-if="pages.length > 5">
+      <Icon icon="ci:chevron-left-duo" class="icon" />
+    </button>
     <button type="button" class="page-btn" @click="prevPage">
-      <Icon icon="bxs:chevron-left" class="icon" />
+      <Icon icon="ci:chevron-left" class="icon" />
     </button>
-    <button type="button" class="page-btn" v-if="values.prev > 1 && values.prev - values.current + 1 === 0"
-      @click="useOperation.page = 0">
-      1
+    <button
+      type="button"
+      v-for="item in pages"
+      v-if="pages.length <= 5"
+      :class="item === useOperation.page ? 'page-btn active' : 'page-btn'"
+      @click="useOperation.page = item"
+    >
+      {{ item + 1 }}
     </button>
-    <button type="button" class="page-btn" v-if="values.prev > 2 && values.prev - values.current + 1 === 0" disabled>
-      ...
-    </button>
-    <button type="button" class="page-btn" v-if="values.current > 1" @click="useOperation.page = values.prev - 1">
-      {{ values.prev }}
-    </button>
-    <button type="button" :class="useOperation.page === values.current - 1 ? 'page-btn active' : 'page=btn'"
-      @click="useOperation.page = values.current - 1">
-      {{ values.current }}
-    </button>
-    <button type="button" class="page-btn" v-if="values.next < pages.length + 1"
-      @click="useOperation.page = values.next - 1">
-      {{ values.next }}
-    </button>
-    <button type="button" class="page-btn" v-if="values.next < pages.length && values.last - pages.length === 0" disabled>
-      ...
-    </button>
-    <button type="button" class="page-btn" v-if="values.next < pages.length && values.last - pages.length === 0"
-      @click="useOperation.page = values.last - 1">
-      {{ values.last }}
-    </button>
+    <div class="btns-container" v-if="pages.length > 5">
+      <button
+        v-if="page.current === pages.length"
+        type="button"
+        class="page-btn"
+        @click="useOperation.page = pages[page.prev - 2]"
+      >
+        {{ pages[page.prev] - 1 }}
+      </button>
+      <button
+        v-if="page.current !== 1"
+        type="button"
+        class="page-btn"
+        @click="useOperation.page = pages[page.prev - 1]"
+      >
+        {{ pages[page.prev] }}
+      </button>
+      <button
+        type="button"
+        v-if="page.current !== pages.length"
+        :class="pages[page.current] - 1 === useOperation.page ? 'page-btn active' : 'page-btn'"
+        @click="useOperation.page = pages[page.current - 1]"
+      >
+        {{ pages[page.current] }}
+      </button>
+      <button
+        type="button"
+        v-else
+        class="page-btn active"
+        @click="useOperation.page = pages.length - 1"
+      >
+        {{ pages.length }}
+      </button>
+      <button
+        v-if="page.current + 1 < pages.length"
+        type="button"
+        class="page-btn"
+        @click="useOperation.page = pages[page.next - 1]"
+      >
+        {{ pages[page.next] }}
+      </button>
+      <button
+        v-if="page.next === pages.length"
+        type="button"
+        class="page-btn"
+        @click="useOperation.page = pages[page.next - 1]"
+      >
+        {{ pages.length }}
+      </button>
+      <button
+        v-if="page.current === 1"
+        type="button"
+        class="page-btn"
+        @click="useOperation.page = pages[page.next]"
+      >
+        {{ pages[page.next] + 1 }}
+      </button>
+    </div>
     <button type="button" class="page-btn" @click="nextPage">
-      <Icon icon="bxs:chevron-right" class="icon" />
+      <Icon icon="ci:chevron-right" class="icon" />
+    </button>
+    <button type="button" class="page-btn" @click="useOperation.page = pages.length - 1" v-if="pages.length > 5">
+      <Icon icon="ci:chevron-right-duo" class="icon" />
     </button>
   </div>
 </template>
 
 <style scoped>
-.btns-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-}
+  .btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
 
-.page-btn {
-  background-color: #ffffff;
-  color: var(--primary);
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 6px;
-  font-size: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
+  .page-btn {
+    background-color: #ffffff;
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
 
-.page-btn:hover {
-  background-color: var(--primary);
-  color: #fff;
-}
+  .page-btn:hover {
+    background-color: var(--primary);
+    color: #fff;
+  }
 
-.page-btn.active {
-  background-color: var(--primary);
-  color: #fff;
-}
+  .page-btn.active {
+    background-color: var(--primary);
+    color: #fff;
+  }
 
-.page-btn:disabled {
-  pointer-events: none;
-  user-select: none;
-}
+  .page-btn:disabled {
+    pointer-events: none;
+    user-select: none;
+  }
 
-.icon {
-  font-size: 28px;
-}
+  .icon {
+    font-size: 28px;
+  }
 </style>

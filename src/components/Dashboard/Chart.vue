@@ -1,50 +1,93 @@
 <script setup lang="ts">
-  import { Line } from 'vue-chartjs';
   import {
     Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
     Title,
     Tooltip,
     Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
   } from 'chart.js';
+  import { Bar } from 'vue-chartjs';
   import { IOperation } from '@/interfaces/operation';
   import { computed } from 'vue';
-  import { formatDate } from '@/utils/formatDate';
+  import { IIncome } from '@/interfaces/income';
 
   interface Props {
     operations: IOperation[];
+    incomes: IIncome[];
+    totalIncomes: number;
+    total: number;
   }
 
   const props = defineProps<Props>();
 
-  const operationsDate = computed(() => {
-    return props.operations.map((item) => {
-      return formatDate(item.data);
-    });
+  // operações de compra
+  const purchaseOperations = computed(() => {
+    return props.operations.reduce((acc, curr) => {
+      if (curr.tipo === 'compra') {
+        return acc + curr.valor * curr.quantidade;
+      } else {
+        return acc;
+      }
+    }, 0);
   });
 
-  const operationsValue = computed(() => {
-    return props.operations.map((item) => {
-      return item.valor * item.quantidade;
-    });
+  // rendimentos atrelados à operações de compra
+  const purchaseIncomes = computed(() => {
+    return props.incomes.reduce((acc, curr) => {
+      if (curr.operacao.tipo === 'compra') {
+        return acc + curr.preco_un * curr.quantidade;
+      } else {
+        return acc;
+      }
+    }, 0);
   });
 
-  ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+  const purchaseTotal = purchaseOperations.value + purchaseIncomes.value;
+
+  // operações de venda
+  const salesOperations = computed(() => {
+    return props.operations.reduce((acc, curr) => {
+      if (curr.tipo === 'venda') {
+        return acc + curr.valor * curr.quantidade;
+      } else {
+        return acc;
+      }
+    }, 0);
+  });
+
+  // rendimentos atrelados à operações de venda
+  const salesIncomes = computed(() => {
+    return props.incomes.reduce((acc, curr) => {
+      if (curr.operacao.tipo === 'venda') {
+        return acc + curr.preco_un * curr.quantidade;
+      } else {
+        return acc;
+      }
+    }, 0);
+  });
+
+  const salesTotal = salesOperations.value + salesIncomes.value;
+
+  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 </script>
 
 <template>
   <div class="container">
-    <Line
+    <Bar
       :data="{
-        labels: operationsDate,
+        labels: ['Operações', 'Rendimentos', 'Carteiras'],
         datasets: [
           {
-            data: operationsValue,
-            label: 'Todos os dias',
+            data: [purchaseOperations, purchaseIncomes, purchaseTotal],
             backgroundColor: '#00ff7f',
+            label: 'Compras',
+          },
+          {
+            data: [salesOperations, salesIncomes, salesTotal],
+            backgroundColor: '#62d0ff',
+            label: 'Vendas',
           },
         ],
       }"

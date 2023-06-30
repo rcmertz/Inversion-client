@@ -1,5 +1,7 @@
 import { request } from './makeRequest';
 
+// funções para fazer requisições nas rotas de investimentos
+
 export function registerInvestment(data: object) {
   return request('/investimentos', {
     method: 'POST',
@@ -8,7 +10,7 @@ export function registerInvestment(data: object) {
 }
 
 export function getAllInvestments() {
-  return request('/investimentos', {
+  return request('/investimentos?size=500000000', {
     method: 'GET',
   });
 }

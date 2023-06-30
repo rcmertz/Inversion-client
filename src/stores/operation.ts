@@ -19,6 +19,7 @@ import {
 import { reactive } from 'vue';
 import { getLocalIncomes, useIncome } from './income';
 
+// store da operação
 export const useOperation = reactive({
   modal: false,
   operations: [] as IOperation[],
@@ -32,6 +33,7 @@ export const useOperation = reactive({
   },
 });
 
+// cadastrar operação e atualizar store automaticamente
 export async function registerLocalOperation(operationData: object) {
   try {
     const { data } = await registerOperation(operationData);
@@ -45,27 +47,31 @@ export async function registerLocalOperation(operationData: object) {
   }
 }
 
+// pegar operações, salvar resposta na store
 export async function getLocalOperations() {
   try {
     const { data } = await getAllOperations();
     await getLocalIncomes();
 
+    // incluir rendimentos atrelados em objetos de operação
     data.content.map((item: IOperation) => {
       item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
     });
 
-    useOperation.totalPages = data.totalPages;
+    useOperation.totalPages = 1;
     useOperation.operations = data.content;
   } catch (error) {
     console.log(error);
   }
 }
 
+// filtrar operações por data, salvar resposta na store, salvar resposta na store
 export async function getLocalOperationsByWallet({ size, carteira }: IGetOperations) {
   try {
     const { data } = await getOperationsByWallet(size, useOperation.page, carteira);
     await getLocalIncomes();
 
+    // incluir rendimentos atrelados em objetos de operação
     data.content.map((item: IOperation) => {
       item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
     });
@@ -77,11 +83,13 @@ export async function getLocalOperationsByWallet({ size, carteira }: IGetOperati
   }
 }
 
+// filtrar operações por investimento que estão atreladas, salvar resposta na store
 export async function getLocalOperationsByInvestment({ size, id }: IGetOperationsByInvestment) {
   try {
     const { data } = await getOperationsByInvestment(size, useOperation.page, id);
     await getLocalIncomes();
 
+    // incluir rendimentos atrelados em objetos de operação
     data.content.map((item: IOperation) => {
       item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
     });
@@ -93,6 +101,7 @@ export async function getLocalOperationsByInvestment({ size, id }: IGetOperation
   }
 }
 
+// filtrar operações por data, salvar resposta na store
 export async function getLocalOperationsByDate({
   size,
   carteira,
@@ -103,6 +112,7 @@ export async function getLocalOperationsByDate({
     const { data } = await getOperationsByDate(size, useOperation.page, carteira, start, end);
     await getLocalIncomes();
 
+    // incluir rendimentos atrelados em objetos de operação
     data.content.map((item: IOperation) => {
       item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
     });
@@ -114,6 +124,7 @@ export async function getLocalOperationsByDate({
   }
 }
 
+// filtrar operações por data e investimento que estão atreladas, salvar resposta na store
 export async function getLocalOperationsByDateAndInvestment({
   size,
   id,
@@ -130,6 +141,7 @@ export async function getLocalOperationsByDateAndInvestment({
     );
     await getLocalIncomes();
 
+    // incluir rendimentos atrelados em objetos de operação
     data.content.map((item: IOperation) => {
       item.rendimentos = useIncome.incomes.filter((income) => income.operacao.id === item.id);
     });
@@ -141,6 +153,12 @@ export async function getLocalOperationsByDateAndInvestment({
   }
 }
 
+// mudar página
+export function changePage(page: number) {
+  useOperation.page = page;
+}
+
+// pegar operação e salvar na store
 export async function getLocalOperation(id: number) {
   try {
     const { data } = await getSingleOperation(id);
@@ -151,6 +169,7 @@ export async function getLocalOperation(id: number) {
   }
 }
 
+// editar operação e atualizar store automaticamente
 export async function updateLocalOperation(id: number, operationData: object) {
   try {
     const { data } = await updateOperation(id, operationData);
@@ -169,6 +188,7 @@ export async function updateLocalOperation(id: number, operationData: object) {
   }
 }
 
+// desativar operação e atualizar store automaticamente
 export async function deleteLocalOperation(id: number, operationData: object) {
   try {
     await deleteOperation(id, operationData);

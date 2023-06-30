@@ -2,6 +2,7 @@
   import { localLogin } from '@/stores/user';
   import { reactive } from 'vue';
 
+  // valores enviados ao backend
   const user = reactive({ email: '', senha: '' });
 
   function handleSubmit() {

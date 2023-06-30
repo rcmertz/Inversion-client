@@ -13,6 +13,7 @@
   import { router } from '@/routes/routes';
   import ModalDeletar from './ModalDeletar.vue';
 
+  // valores enviados ao backend
   const form = ref({
     investimentoId: 0,
     nomeInvestimento: '',
@@ -25,26 +26,32 @@
     },
   });
 
+  // filtra investimentos ativos
   const investments = computed(() => {
     return useInvestment.investments.filter((item) => item.ativo);
   });
 
+  // investimento selecionado
   const selectedInvestment = computed(() => {
     return investments.value.find((item) => {
       return item.id === form.value.investimentoId;
     });
   });
 
+  // filtra carteiras ativas
   const wallets = computed(() => {
     return useWallet.wallets.filter((item) => item.ativo);
   });
 
+  // carteira selecionada
   const selectedWallet = computed(() => {
     return wallets.value.find((item) => {
       return item.id === form.value.carteira.carteiraId;
     });
   });
 
+  // quando o investimento é selecionado
+  // salva os dados para fazer a requisição
   watch(selectedInvestment, (value) => {
     form.value.nomeInvestimento = value!.nomeInvestimento;
     form.value.carteira.carteiraId = value?.carteira.id!;
@@ -84,6 +91,7 @@
     alert('Investimento desativado com sucesso!');
   }
 
+  // pega investimentos e carteiras quando o componente é renderizado
   onMounted(() => {
     getLocalInvestments();
     getLocalWallets();

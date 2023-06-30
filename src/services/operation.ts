@@ -1,5 +1,7 @@
 import { request } from './makeRequest';
 
+// funções para fazer requisições nas rotas de operação
+
 export function registerOperation(data: object) {
   return request('/operacao', {
     method: 'POST',

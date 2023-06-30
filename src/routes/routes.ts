@@ -65,6 +65,9 @@ export const router = createRouter({
   routes,
 });
 
+// antes de cada navegação, verifica se tem usuário logado e
+// e se há um token válido
+
 // @ts-expect-error from não está sendo usado
 router.beforeEach(async (to, from, next) => {
   useOperation.modal = false;

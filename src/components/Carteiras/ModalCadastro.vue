@@ -4,12 +4,13 @@
   import SectionTitle from '../SectionTitle.vue';
   import { registerLocalWallet } from '@/stores/wallet';
 
-  const modal = ref(false);
+  // valores enviados ao backend
   const form = reactive({
     descricaoCarteira: '',
     ativo: true,
     valorCarteira: 0,
   });
+  const modal = ref(false);
 
   async function handleSubmit() {
     await registerLocalWallet({ ...form, descricaoCarteira: form.descricaoCarteira.toUpperCase() });

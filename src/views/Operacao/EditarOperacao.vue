@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Layout from '@/components/Layout.vue';
   import Editar from '@/components/Operacao/Editar.vue';
-  import InvestimnetoModal from '@/components/Operacao/Investimento/Modal.vue';
+  import InvestimentoModal from '@/components/Operacao/Investimento/Modal.vue';
   import { useOperation } from '@/stores/operation';
 </script>
 
 <template>
   <Layout sidebar>
-    <InvestimnetoModal v-if="useOperation.modal" />
+    <InvestimentoModal v-if="useOperation.modal" />
     <section>
       <Editar />
     </section>
