@@ -19,7 +19,6 @@
 
   const route = useRoute();
 
-  // filtra operações ativas, atreladas a investimentos ativos
   const operations = computed(() => {
     return useOperation.operations?.filter((item) => {
       return (
@@ -30,28 +29,25 @@
     });
   });
 
-  // filtra rendimentos ativos
   const incomes = computed(() => {
     return useIncome.incomes.filter((item) => item.ativo);
   });
 
-  // filtra investimentos ativos
   const investments = computed(() => {
     return useInvestment.investments.filter((item) => item.ativo);
   });
 
-  // páginas
   const pages = computed(() => {
     return Array.from({ length: useOperation.totalPages }, (_item, index) => {
       return index;
     });
   });
 
-  // espera pela mudança de valor de alguma das propriedades no callback e executa alguma função
+
   watchEffect(async () => {
-    // se todos os valores de filtro estiverem preenchidos
+
     if (useOperation.investmentId && useOperation.dates.start && useOperation.dates.end) {
-      // filtra operações por data e investimento
+
       await getLocalOperationsByDateAndInvestment({
         size: 10,
         start: useOperation.dates.start,
@@ -59,26 +55,22 @@
         id: useOperation.investmentId,
       });
 
-      // se não retornar nada, estoura alert abaixo
+
       if (useOperation.operations.length === 0) {
         alert('Não há operações atreladas a esse investimento nesse período.');
         router.go(0);
       }
 
-      // se filtros data não estiverem preenchidos verifica
     } else if (!useOperation.dates.start && !useOperation.dates.end) {
-      // se investimento está selecionado
+
       if (useOperation.investmentId > 0) {
-        // filtra operações por investimento
+
         await getLocalOperationsByInvestment({ size: 10, id: useOperation.investmentId });
       } else {
-        // filtra operações por carteira
         await getLocalOperationsByWallet({ size: 10, carteira: Number(route.params.id) });
       }
 
-      // verifica se investimento não está selecionado
     } else if (!useOperation.investmentId) {
-      // filtra operações por data
       await getLocalOperationsByDate({
         size: 10,
         start: useOperation.dates.start,
@@ -86,7 +78,6 @@
         carteira: Number(route.params.id),
       });
 
-      // se não retornar nada, estoura alert abaixo
       if (useOperation.operations.length === 0) {
         alert('Não há operações nesse período.');
         router.go(0);
@@ -94,15 +85,11 @@
     }
   });
 
-  // filtra operações por carteira e pega investimentos quando
-  // o componente renderizar
   onMounted(() => {
     getLocalOperationsByWallet({ size: 10, carteira: Number(route.params.id) });
     getLocalInvestmentsOnly();
   });
 
-  // filtra operações por carteira e pega investimentos quando
-  // o componente atualizar
   onUpdated(() => {
     getLocalOperationsByWallet({ size: 10, carteira: Number(route.params.id) });
     getLocalInvestmentsOnly();

@@ -7,31 +7,31 @@
   import { getLocalOperations, useOperation } from '@/stores/operation';
   import { computed, onMounted } from 'vue';
 
-  // filtra rendimentos ativos atrelados à operações ativas
+
   const incomes = computed(() => {
     return useIncome.incomes.filter((item) => item.ativo && item.operacao.ativo);
   });
 
-  // calcula valor total dos rendimentos
+
   const totalIncome = computed(() => {
     return incomes.value.reduce((acc, curr) => {
       return acc + curr.preco_un * curr.quantidade;
     }, 0);
   });
 
-  // filtra operações ativas atrelados à investimentos ativos
+
   const operations = computed(() => {
     return useOperation.operations.filter((item) => item.ativo && item.investimento.ativo);
   });
 
-  // calcula valor total das operações
+
   const totalOperations = computed(() => {
     return operations.value.reduce((acc, curr) => {
       return acc + curr.valor * curr.quantidade;
     }, 0);
   });
 
-  // pega operações quando o componente renderizar
+
   onMounted(() => {
     getLocalOperations();
   });

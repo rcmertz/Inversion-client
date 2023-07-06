@@ -145,7 +145,7 @@
             :value="item!.id"
           >
             {{ item!.investimento.nomeInvestimento }} - {{ formatDate(item!.data) }} -
-            {{ item!.tipo }} - {{ item!.id }}
+            {{ item!.tipo }}
           </option>
           <option disabled value="0" v-else>0 investimentos cadastrados</option>
         </select>

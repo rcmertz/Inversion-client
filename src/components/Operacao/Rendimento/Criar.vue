@@ -83,8 +83,7 @@
         <select name="descricao" id="descricao" required v-model="form.operacaoId">
           <option disabled value="0" class="placeholder">Selecione uma operação</option>
           <option v-if="operations.length > 0" v-for="item in operations" :value="item.id">
-            {{ item.investimento.nomeInvestimento }} - {{ formatDate(item.data) }} -
-            {{ item.tipo }} - {{ item.id }}
+            {{ item.investimento.nomeInvestimento }} - {{ formatDate(item.data) }} - {{ item.tipo }}
           </option>
           <option disabled value="0" v-else>0 investimentos cadastrados</option>
         </select>
