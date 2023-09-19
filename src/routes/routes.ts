@@ -8,6 +8,7 @@ import Operacao from '@/views/Operacao/index.vue';
 import Rendimento from '@/views/Operacao/Rendimento.vue';
 import EditarOperacao from '@/views/Operacao/EditarOperacao.vue';
 import EditarRendimento from '@/views/Operacao/EditarRendimento.vue';
+import AprendaMais from '@/views/AprendaMais.vue';
 import { getLocalUser, useUser } from '@/stores/user';
 import { useOperation } from '@/stores/operation';
 import { useInvestment } from '@/stores/investment';
@@ -52,6 +53,11 @@ const routes = [
     path: '/operacao/editar-operacao/:id',
     name: 'Editar operação',
     component: EditarOperacao,
+  },
+  {
+    path: '/aprendamais',
+    name: 'Aprenda Mais',
+    component: AprendaMais,
   },
   {
     path: '/operacao/editar-rendimento',

@@ -17,4 +17,10 @@ export const sidebar = [
     name: 'Operação',
     route: '/operacao',
   },
+  {
+    id: '5',
+    icon: 'iconoir:media-video-list',
+    name: 'Aprenda Mais',
+    route: '/aprendamais',
+  },
 ];

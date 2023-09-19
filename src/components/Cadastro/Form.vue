@@ -50,110 +50,82 @@
     </div> -->
     <div class="form-row">
       <label for="email">E-mail</label>
-      <input
-        type="email"
-        name="email"
-        id="email"
-        placeholder="name@gmail.com"
-        v-model="form.email"
-        required
-      />
+      <input type="email" name="email" id="email" placeholder="name@gmail.com" v-model="form.email" required />
     </div>
     <div class="form-row">
       <label for="telefone">Telefone</label>
-      <input
-        type="text"
-        name="telefone"
-        id="telefone"
-        placeholder="(99) 99999-9999"
-        maxlength="15"
-        ref="phone"
-        required
-      />
+      <input type="text" name="telefone" id="telefone" placeholder="(99) 99999-9999" maxlength="15" ref="phone"
+        required />
     </div>
     <div class="form-row">
       <label for="cpf">CPF</label>
-      <input
-        type="text"
-        name="cpf"
-        id="cpf"
-        placeholder="123.456.789-01"
-        maxlength="14"
-        ref="cpf"
-        required
-      />
+      <input type="text" name="cpf" id="cpf" placeholder="123.456.789-01" maxlength="14" ref="cpf" required />
     </div>
     <div class="form-row">
       <label for="senha">Senha</label>
-      <input
-        type="password"
-        name="senha"
-        id="senha"
-        placeholder="password"
-        v-model="form.senha"
-        required
-      />
+      <input type="password" name="senha" id="senha" placeholder="password" v-model="form.senha" required />
     </div>
-    <p class="already-member">Já é membro? <RouterLink to="/login">Entrar</RouterLink></p>
+    <p class="already-member">Já é membro? <RouterLink to="/login">Entrar</RouterLink>
+    </p>
     <button type="submit">Criar conta</button>
   </form>
 </template>
 
 <style scoped>
-  form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 32px;
-    column-gap: 82px;
-    background-color: #fff;
-    padding: 52px;
-  }
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 32px;
+  column-gap: 82px;
+  background-color: #fff;
+  padding: 52px;
+}
 
-  .form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  label {
-    font-family: var(--inter);
-    font-size: 20px;
-    font-weight: 600;
-  }
+label {
+  font-family: var(--inter);
+  font-size: 20px;
+  font-weight: 600;
+}
 
-  input {
-    background-color: var(--input);
-    padding: 24px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-family: var(--montserrat);
-    font-weight: 500;
-  }
+input {
+  background-color: var(--input);
+  padding: 24px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-family: var(--montserrat);
+  font-weight: 500;
+}
 
-  .already-member {
-    text-transform: uppercase;
-    font-family: var(--inter);
-    font-weight: 600;
-    font-size: 16px;
-    grid-column: span 2 / span 2;
-    margin-top: -5px;
-  }
+.already-member {
+  text-transform: uppercase;
+  font-family: var(--inter);
+  font-weight: 600;
+  font-size: 16px;
+  grid-column: span 2 / span 2;
+  margin-top: -5px;
+}
 
-  .already-member > a {
-    color: var(--primary);
-    text-decoration: none;
-    font-family: var(--inter);
-  }
+.already-member>a {
+  color: var(--primary);
+  text-decoration: none;
+  font-family: var(--inter);
+}
 
-  button {
-    padding-block: 24px;
-    text-transform: uppercase;
-    background-color: var(--primary-alt);
-    font-family: var(--inter);
-    font-size: 24px;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 8px;
-    grid-column: span 2 / span 2;
-  }
+button {
+  padding-block: 24px;
+  text-transform: uppercase;
+  background-color: var(--primary-alt);
+  font-family: var(--inter);
+  font-size: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  grid-column: span 2 / span 2;
+}
 </style>
