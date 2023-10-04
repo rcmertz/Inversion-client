@@ -4,35 +4,35 @@
 
         <div class="video-cards-container">
             <div class="video-card hover" data-video-url="URL_DO_VIDEO1">
-                <div class="thumbnail">
-                    <img src="https://www.intermedia-solutions.net/wp-content/uploads/2021/06/video-thumbnail-01.jpg"
-                        alt="Thumbnail 1">
+                <div id="app">
+                    <iframe src="https://www.youtube.com/embed/yHuNhkntc-I?si=Jc6hg2lO0BjadeB7" width="280"
+                        height="180"></iframe>
                 </div>
                 <div class="info">
-                    <h3>Título do Vídeo 1</h3>
-                    <p>Descrição do Vídeo 1.</p>
+                    <h3>Como investir em ações</h3>
+                    <p>GUIA BÁSICO PRA INVESTIR EM AÇÕES: TUDO que você PRECISA SABER antes de investir em AÇÕES!.</p>
                 </div>
             </div>
 
             <div class="video-card hover" data-video-url="URL_DO_VIDEO2">
-                <div class="thumbnail">
-                    <img src="https://www.intermedia-solutions.net/wp-content/uploads/2021/06/video-thumbnail-01.jpg"
-                        alt="Thumbnail 2">
+                <div id="app">
+                    <iframe src="https://www.youtube.com/embed/EFpS2s4gFRY?si=2picmNsfXDISB0k7" width="280"
+                        height="180"></iframe>
                 </div>
                 <div class="info">
-                    <h3>Título do Vídeo 2</h3>
-                    <p>Descrição do Vídeo 2.</p>
+                    <h3>Investimentos para iniciantes</h3>
+                    <p>Os Melhores investimentos para iniciantes</p>
                 </div>
             </div>
 
             <div class="video-card hover" data-video-url="URL_DO_VIDEO2">
-                <div class="thumbnail">
-                    <img src="https://www.intermedia-solutions.net/wp-content/uploads/2021/06/video-thumbnail-01.jpg"
-                        alt="Thumbnail 2">
+                <div id="app">
+                    <iframe src="https://www.youtube.com/embed/Acgd5fkXDmM?si=H-HkxI8NVeU_Gk1t=1" width="280"
+                        height="180"></iframe>
                 </div>
                 <div class="info">
-                    <h3>Título do Vídeo 2</h3>
-                    <p>Descrição do Vídeo 2.</p>
+                    <h3>Iniciantes na Bolsa</h3>
+                    <p>investimentos para iniciantes na bolsa de valores</p>
                 </div>
             </div>
             <!-- ... -->
@@ -44,23 +44,23 @@
         <div class="card-container" style=" color: white;">
 
             <div class="card">
-                <h3>Título 1</h3>
-                <p>Texto do Card 1. Este card expande no hover.</p>
+                <h3>Diversifique sua Carteira</h3>
+                <p>Distribua seus investimentos em diferentes ativos para reduzir riscos.</p>
             </div>
 
             <div class="card">
-                <h3>Título 2</h3>
-                <p>Texto do Card 2. Este card expande no hover.</p>
+                <h3>Avalie o Perfil de Risco</h3>
+                <p> Escolha investimentos alinhados com seu perfil de tolerância ao risco.</p>
             </div>
 
             <div class="card">
-                <h3>Título 3</h3>
+                <h3>Aprenda sobre ETFs</h3>
                 <p>Texto do Card 3. Este card expande no hover.</p>
             </div>
 
             <div class="card">
-                <h3>Título 4</h3>
-                <p>Texto do Card 4. Este card expande no hover.</p>
+                <h3>Eduque-se Constantemente</h3>
+                <p>Mantenha-se atualizado com informações sobre o mercado e estratégias de investimento.</p>
             </div>
         </div>
     </div>
@@ -94,6 +94,7 @@ export default {
     gap: 20px;
 }
 
+
 .video-card {
     border: 1px solid #ccc;
     color: white !important;
@@ -117,7 +118,7 @@ export default {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
     margin-left: 6%;
-    margin-top: 4%;
+    margin-top: 2%;
 }
 
 .titulo {
@@ -126,7 +127,7 @@ export default {
 }
 
 .video-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.07);
 
 }
 
@@ -179,3 +180,4 @@ export default {
 }
 </style>
   
+
