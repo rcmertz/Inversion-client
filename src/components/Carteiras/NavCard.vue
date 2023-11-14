@@ -11,7 +11,8 @@
 
   // pega carteiras quando componente renderizar
   async function handleDeletion() {
-    await deleteLocalWallet(props.item.id, { ...props, ativo: false });
+    // console.log(props.item.id)
+    await deleteLocalWallet(props.item.id, { ...props.item, ativo: false });
     modal.value = false;
     router.push('/carteiras');
   }

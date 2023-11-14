@@ -17,7 +17,7 @@
 <template>
   <section>
     <nav v-if="activeWallets.length > 0">
-      <NavCard v-for="item in activeWallets" :item="item" />
+      <NavCard v-for="item in activeWallets" :item="item" :key="item.id" />
     </nav>
     <h1 v-else>0 carteiras cadastradas...</h1>
 

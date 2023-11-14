@@ -18,7 +18,7 @@ export async function registerLocalWallet(walletData: object) {
     alert('Carteira cadastrada com sucesso!');
   } catch (error: any) {
     console.log(error);
-    alert(error.response.data.erro)
+    alert(error.response.data.erro);
   }
 }
 
@@ -55,7 +55,9 @@ export async function updateLocalWallet(id: number, walletData: object) {
 // desativar carteira e atualizar a store automaticamente
 export async function deleteLocalWallet(id: number, walletData: object) {
   try {
-    await deleteWallet(id, walletData);
+    const { data } = await deleteWallet(id, walletData);
+
+    console.log(data);
 
     // desativar investimentos atrelados
     useInvestment.investments.forEach(async (item) => {
