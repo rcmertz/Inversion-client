@@ -23,4 +23,10 @@ export const sidebar = [
     name: 'Aprenda Mais',
     route: '/aprendamais',
   },
+  {
+    id: '6',
+    icon: 'iconoir:printing-page',
+    name: 'Relatorio',
+    route: '/relatorio',
+  },
 ];

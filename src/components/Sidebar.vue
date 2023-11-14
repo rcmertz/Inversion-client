@@ -25,7 +25,7 @@ async function handleLogout() {
         </button>
       </div>
       <div
-        v-if="$route.path.includes('carteira') || $route.path.includes('operacao') || $route.path.includes('aprendamais')"
+        v-if="$route.path.includes('carteira') || $route.path.includes('operacao') || $route.path.includes('aprendamais') || $route.path.includes('relatorio')"
         class="current-user">
         <Icon icon="ooui:user-avatar" class="user-icon" />
         <p v-if="isOpen && useUser.user">{{ useUser.user.nome }}</p>
@@ -38,7 +38,7 @@ async function handleLogout() {
         </RouterLink>
       </div>
     </div>
-    <button type="button" class="logout" @click="handleLogout">
+    <button type="button" class="logout" @click="handleLogout" style="margin-top: 15%">
       <Icon icon="material-symbols:logout-rounded" class="icon logout-icon" />
     </button>
   </aside>
