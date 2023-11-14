@@ -10,6 +10,8 @@ import EditarOperacao from '@/views/Operacao/EditarOperacao.vue';
 import EditarRendimento from '@/views/Operacao/EditarRendimento.vue';
 import AprendaMais from '@/views/AprendaMais.vue';
 import Relatorio from '@/views/Relatorio.vue'
+import Meta from '@/views/Meta/Meta.vue'
+import MetaCadastro from '@/views/Meta/MetaCadastro.vue'
 import { getLocalUser, useUser } from '@/stores/user';
 import { useOperation } from '@/stores/operation';
 import { useInvestment } from '@/stores/investment';
@@ -69,6 +71,21 @@ const routes = [
     path: '/operacao/editar-rendimento',
     name: 'Editar rendimento',
     component: EditarRendimento,
+  },
+  {
+    path: '/metas',
+    name: 'Metas',
+    component: Meta,
+  },
+  {
+    path: '/metas/cadastro',
+    name: 'CadastrarMeta',
+    component: MetaCadastro,
+  },
+  {
+    path: '/metas/editar/:id',
+    name: 'EditarMeta',
+    component: MetaCadastro,
   },
 ];
 

@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 // cria função para realizar requisições com axios
 // e determina uma url de base
 export const api = axios.create({
-  baseURL: 'http://localhost:5850/api',
+  baseURL: 'http://localhost:8080/api',
 });
 
 // função para realizar requisições

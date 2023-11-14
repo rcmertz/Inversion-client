@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue';
 import { sidebar } from '@/data/sidebar';
 import { isOpen, toggleSidebar } from '@/stores/sidebar';
 import { useRouter } from 'vue-router';
-import { localLogout, useUser } from '@/stores/user';
+import { localLogout } from '@/stores/user';
 
 const router = useRouter();
 
@@ -24,12 +24,12 @@ async function handleLogout() {
             class="icon toggle-icon" />
         </button>
       </div>
-      <div
+      <!-- <div
         v-if="$route.path.includes('carteira') || $route.path.includes('operacao') || $route.path.includes('aprendamais') || $route.path.includes('relatorio')"
         class="current-user">
         <Icon icon="ooui:user-avatar" class="user-icon" />
         <p v-if="isOpen && useUser.user">{{ useUser.user.nome }}</p>
-      </div>
+      </div> -->
       <div class="links-list">
         <RouterLink active-class="link active" :to="item.route" v-for="item in sidebar" :key="item.id"
           :class="isOpen ? 'link open' : 'link'">

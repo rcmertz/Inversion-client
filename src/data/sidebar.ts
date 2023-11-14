@@ -29,4 +29,10 @@ export const sidebar = [
     name: 'Relatorio',
     route: '/relatorio',
   },
+  {
+    id: '7',
+    icon: 'iconoir:white-flag',
+    name: 'Metas',
+    route: '/metas',
+  },
 ];
