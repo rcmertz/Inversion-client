@@ -26,7 +26,7 @@ export const sidebar = [
   {
     id: '6',
     icon: 'iconoir:printing-page',
-    name: 'Relatorio',
+    name: 'Relatório',
     route: '/relatorio',
   },
 ];
