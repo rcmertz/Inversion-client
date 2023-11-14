@@ -146,7 +146,7 @@ onMounted(() => {
           <div class="form-row">
             <label for="valor">Valor UN</label>
             <p class="currency">R$</p>
-            <input type="number" name="valor" id="valor" min="0" step="0.01" class="valor-unitario" required
+            <input type="number" name="valor" id="valor" step="0.01" class="valor-unitario" required
               v-model="form.valor" />
           </div>
 
@@ -212,6 +212,30 @@ form {
   gap: 60px;
   background-color: #fff;
   padding: 36px;
+}
+
+/* Add media query for smaller screens */
+@media (max-width: 1400px) {
+  form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-row:nth-child(2)>.custom-select {
+    width: 100%;
+    /* Adjust width for smaller screens */
+  }
+
+  .buttons {
+    grid-column: span 2 / span 2;
+  }
+}
+
+/* Add media query for even smaller screens */
+@media (max-width: 768px) {
+  form {
+    grid-template-columns: 1fr;
+    /* Switch to a single column for smaller screens */
+  }
 }
 
 header {
