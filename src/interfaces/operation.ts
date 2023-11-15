@@ -10,6 +10,7 @@ export interface IOperation {
   investimento: IInvestment;
   cadastro: string;
   data: string;
+  preco_medio: number;
   rendimentos: IIncome[];
 }
 

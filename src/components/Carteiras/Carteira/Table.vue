@@ -18,33 +18,33 @@
   const props = defineProps<Props>();
 
   // pegar preço médio
-  function getAveragePrice(operation: IOperation) {
-    // encontra investimento que a operação está atrelada
-    const tempInvestments = props.investments?.find((item) => {
-      if (operation.tipo === 'compra') {
-        return item.id === operation.investimento.id;
-      }
-    });
+  // function getAveragePrice(operation: IOperation) {
+  //   // encontra investimento que a operação está atrelada
+  //   const tempInvestments = props.investments?.find((item) => {
+  //     if (operation.tipo === 'compra') {
+  //       return item.id === operation.investimento.id;
+  //     }
+  //   });
 
-    // encontra operações de compra
-    const shopOperations = tempInvestments?.operacoes?.filter((item) => {
-      return item.tipo === 'compra';
-    });
+  //   // encontra operações de compra
+  //   const shopOperations = tempInvestments?.operacoes?.filter((item) => {
+  //     return item.tipo === 'compra';
+  //   });
 
-    // multiplica valor e quantidade das operações de compra
-    const totalValue = tempInvestments?.operacoes?.reduce((acc, curr) => {
-      if (curr.tipo === 'compra') {
-        return acc + curr.valor * curr.quantidade;
-      } else {
-        return acc;
-      }
-    }, 0);
+  //   // multiplica valor e quantidade das operações de compra
+  //   const totalValue = tempInvestments?.operacoes?.reduce((acc, curr) => {
+  //     if (curr.tipo === 'compra') {
+  //       return acc + curr.valor * curr.quantidade;
+  //     } else {
+  //       return acc;
+  //     }
+  //   }, 0);
 
-    // calcula a média
-    const price = totalValue! / shopOperations?.length!;
+  //   // calcula a média
+  //   const price = totalValue! / shopOperations?.length!;
 
-    return price;
-  }
+  //   return price;
+  // }
 
   // pegar rendimentos da operação
   function getOperationIncome(operation: IOperation) {
@@ -99,11 +99,8 @@
         <td class="table-date">
           {{ formatDate(item.data) }}
         </td>
-        <td class="table-average" v-if="!isNaN(getAveragePrice(item))">
-          {{ formatCurrency(getAveragePrice(item)) }}
-        </td>
-        <td class="table-average" v-else>
-          {{ formatCurrency(0) }}
+        <td class="table-average">
+          {{ formatCurrency(item.preco_medio) }}
         </td>
         <td class="table-total">
           {{ formatCurrency(item.quantidade * item.valor + getOperationIncome(item)) }}
