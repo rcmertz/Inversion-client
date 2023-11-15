@@ -1,6 +1,13 @@
 <template>
     <div>
-        <table class="rwd-table" style="margin-top: 15%; border-radius: 7px">
+        <div
+            style="background:white; border-radius:7px; width: 35%; display: flex; padding: 2px; margin-top: 7%; margin-left:52%">
+            <h4>&nbspFiltrar de: &nbsp</h4>
+            <input type="date" />
+            <h4>, até: &nbsp</h4>
+            <input type="date" />
+        </div>
+        <table class="rwd-table" style="margin-top: 3%; border-radius: 7px">
             <tr>
                 <th>Número</th>
                 <th>Carteira</th>
@@ -45,6 +52,7 @@
     </div>
 </template>
   
+
 <style scoped>
 .rwd-table {
     background: #eeeeee;
