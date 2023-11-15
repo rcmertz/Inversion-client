@@ -34,3 +34,9 @@ export function deleteMeta(id: number, data: object) {
     data,
   });
 }
+
+export function getAporteMensal(id: number) {
+  return request(`/metas/${id}/calcular-aporte`, {
+    method: 'GET',
+  });
+}

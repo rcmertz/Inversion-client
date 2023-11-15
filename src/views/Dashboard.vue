@@ -61,6 +61,7 @@
         :incomes="incomes"
         :total-incomes="totalIncome"
         :total="totalOperations + totalIncome"
+        :is-meta="false"
       />
     </section>
   </Layout>

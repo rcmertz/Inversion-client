@@ -14,17 +14,20 @@
   import { IIncome } from '@/interfaces/income';
 
   interface Props {
-    operations: IOperation[];
-    incomes: IIncome[];
-    totalIncomes: number;
-    total: number;
+    operations?: IOperation[];
+    incomes?: IIncome[];
+    totalIncomes?: number;
+    total?: number;
+    valorRealizado?: number;
+    valorMeta?: number;
+    isMeta?: boolean;
   }
 
   const props = defineProps<Props>();
 
   // operações de compra
   const purchaseOperations = computed(() => {
-    return props.operations.reduce((acc, curr) => {
+    return props.operations?.reduce((acc, curr) => {
       if (curr.tipo === 'compra') {
         return acc + curr.valor * curr.quantidade;
       } else {
@@ -35,7 +38,7 @@
 
   // rendimentos atrelados à operações de compra
   const purchaseIncomes = computed(() => {
-    return props.incomes.reduce((acc, curr) => {
+    return props.incomes?.reduce((acc, curr) => {
       if (curr.operacao.tipo === 'compra') {
         return acc + curr.preco_un * curr.quantidade;
       } else {
@@ -44,11 +47,11 @@
     }, 0);
   });
 
-  const purchaseTotal = purchaseOperations.value + purchaseIncomes.value;
+  const purchaseTotal = purchaseOperations.value ?? 0 + (purchaseIncomes.value ?? 0);
 
   // operações de venda
   const salesOperations = computed(() => {
-    return props.operations.reduce((acc, curr) => {
+    return props.operations?.reduce((acc, curr) => {
       if (curr.tipo === 'venda') {
         return acc + curr.valor * curr.quantidade;
       } else {
@@ -59,7 +62,7 @@
 
   // rendimentos atrelados à operações de venda
   const salesIncomes = computed(() => {
-    return props.incomes.reduce((acc, curr) => {
+    return props.incomes?.reduce((acc, curr) => {
       if (curr.operacao.tipo === 'venda') {
         return acc + curr.preco_un * curr.quantidade;
       } else {
@@ -68,24 +71,24 @@
     }, 0);
   });
 
-  const salesTotal = salesOperations.value + salesIncomes.value;
+  const salesTotal = salesOperations.value ?? 0 + (salesIncomes.value ?? 0);
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="!isMeta">
     <Bar
       :data="{
         labels: ['Operações', 'Rendimentos', 'Carteiras'],
         datasets: [
           {
-            data: [purchaseOperations, purchaseIncomes, purchaseTotal],
+            data: [purchaseOperations ?? 0, purchaseIncomes ?? 0, purchaseTotal],
             backgroundColor: '#00ff7f',
             label: 'Compras',
           },
           {
-            data: [salesOperations, salesIncomes, salesTotal],
+            data: [salesOperations ?? 0, salesIncomes ?? 0, salesTotal],
             backgroundColor: '#62d0ff',
             label: 'Vendas',
           },
@@ -96,6 +99,33 @@
         maintainAspectRatio: false,
       }"
     />
+  </div>
+  <div class="container" v-if="isMeta">
+    <Bar
+      :data="{
+        labels: [''],
+        datasets: [
+          {
+            data: [props.valorRealizado ?? 0], 
+            backgroundColor: '#00ff7f',
+            label: 'Valor Realizado',
+          },
+          {
+            data: [props.valorMeta ?? 0],
+            backgroundColor: '#62d0ff',
+            label: 'Valor da Meta',
+          },
+        ],
+      }"
+      :options="{
+        responsive: true,
+        maintainAspectRatio: false,
+      }"
+    />
+    <div style="display: flex; justify-content: space-around; font-size: 15px;">
+      <p>Carteira</p>
+      <p>Meta</p>
+    </div>
   </div>
 </template>
 

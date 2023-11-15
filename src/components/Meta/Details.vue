@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import SectionTitle from '../SectionTitle.vue';
-import { registerLocalMeta } from '@/stores/meta';
-import { computed, onMounted, reactive } from 'vue';
+import { getLocalMeta, getLocalMetaAporte, updateLocalMeta, useMeta } from '@/stores/meta';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import { getLocalWallets, useWallet } from '@/stores/wallet';
-import { router } from '@/routes/routes';
+import { useRoute } from 'vue-router';
+import Chart from '@/components/Dashboard/Chart.vue';
 
 // valores enviados ao backend
-const form = reactive({
+const form = ref({
   descricaoMeta: "",
   valorMeta: 0,
   rentabilidade: 0,
@@ -18,91 +18,84 @@ const form = reactive({
   },
 });
 
-// filtra carteiras ativos
-const wallets = computed(() => {
-    return useWallet.wallets?.filter((item) => item.ativo);
-  });
+const aporte = ref({
+  valorRealizado: 0,
+  rentabilidade: 0,
+  dataRestante: 0,
+  valorMeta: 0,
+  aporteMensal: 0
+})
 
-async function handleSubmit() {
-  await registerLocalMeta({ ...form, descricaoMeta: form.descricaoMeta.toUpperCase() });
-  router.push('/metas');
-}
+const route = useRoute();
 
 // pega investimentos quando o componente renderizar
 onMounted(() => {
+  getLocalMeta(Number(route.params.id));
+  getLocalMetaAporte(Number(route.params.id));
   getLocalWallets();
+  form.value = { ...useMeta.meta! };
+  aporte.value = { ...useMeta.aporte! };
 });
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit">
-    <div>
-      <header>
-        <SectionTitle title="Cadastro de meta" />
+    <div class="form">
+      <header class="header">
+        <div class="card">
+          <p>Meta</p>
+          <h1>{{form.descricaoMeta}}</h1>
+        </div>
+        <div class="card">
+          <p>Aporte Mensal</p>
+          <div style="display: flex; justify-content: space-between;">
+            <h1>R$ {{ aporte.aporteMensal }}</h1>
+            <p>{{ aporte.rentabilidade }} %</p>
+          </div>
+        </div>
+        <div class="card">
+          <p>Meses restantes</p>
+          <h1>{{ aporte.dataRestante}} meses</h1>
+        </div>
       </header>
 
-      <div style="display: flex;">
-        <div style="width: 100%;">
-          <!-- Data -->
-          <div class="form-row">
-            <label for="dataMeta">Data</label>
-            <input type="date" name="dataMeta" id="dataMeta" placeholder="dd/mm/aaaa" required v-model="form.dataMeta" />
-          </div>
+      <div style="width: 60vw;">
+        <Chart
+        :valor-realizado="aporte.valorRealizado"
+        :valor-meta="aporte.valorMeta"
+        :is-meta="true"
+        />
+      </div>
 
 
-          <!-- Descrição -->
-          <div class="form-row">
-            <label for="descricaoMeta">Descrição</label>
-            <input type="text" name="descricaoMeta" id="descricaoMeta" required v-model="form.descricaoMeta" />
-          </div>
-
-          <!-- Valor -->
-          <div class="form-row">
-            <label for="valorMeta">Valor</label>
-            <p class="currency">R$</p>
-            <input type="number" name="dataMeta" id="dataMeta" step="0.01" class="valor-unitario" required
-              v-model="form.valorMeta" />
-          </div>
-
-          <!-- Rentabilidade -->
-          <div class="form-row">
-            <label for="rentabilidade">Rentabilidade</label>
-            <input type="text" name="rentabilidade" id="rentabilidade" required v-model="form.rentabilidade" />
-          </div>
-        </div>
-        <div style="margin-left: 10%;">
-          <!-- Carteira -->
-          <div class="form-row">
-            <label for="investimento">Carteira</label>
-            <div class="custom-select" style="width: 90%;">
-              <select name="investimento" id="carteira" required v-model="form.carteira.id">
-                <option disabled value="0" class="placeholder">Selecione uma carteira</option>
-                <option v-if="wallets.length > 0" v-for="item in wallets" :value="item.id">
-                  {{ item.descricaoCarteira }}
-                </option>
-                <option v-else disabled value="0">0 carteiras cadastradas</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="buttons" style="margin-top: 6%;">
-            <RouterLink to="/metas">Cancelar</RouterLink>
-            <button router-push type="submit">Confirmar</button>
-          </div>
-        </div>
+      <div class="buttons">
+        <RouterLink to="/metas">Voltar</RouterLink>
       </div>
 
     </div>
-  </form>
 </template>
 
 <style scoped>
-form {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 60px;
+.form {
+  display: flex;
+  height: 85vh;
+  flex-direction: column;
+  align-items: center;
   background-color: #fff;
   padding: 36px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+.card{
+  width: 20vw;
+  height: 17vh;
+  border-radius: 20px;
+  margin: 10px;
+  padding: 30px;
+  background-color: #d7dfe9;
 }
 
 /* Add media query for smaller screens */
@@ -211,7 +204,7 @@ input {
 }
 
 .buttons>* {
-  background-color: var(--primary-alt);
+  background-color: #FF3030;
   font-family: var(--inter);
   font-weight: 600;
   font-size: 25px;

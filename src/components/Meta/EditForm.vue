@@ -45,18 +45,6 @@ const route = useRoute();
 
 // pega investimentos quando o componente renderizar
 onMounted(() => {
-  form.value = {
-    descricaoMeta: "",
-    valorMeta: 0,
-    rentabilidade: 0,
-    ativo: true,
-    dataMeta: "",
-    carteira: {
-      id: 0,
-      ativo: true,
-    },
-  };
-  
   getLocalMeta(Number(route.params.id));
   getLocalWallets();
   form.value = { ...useMeta.meta! };

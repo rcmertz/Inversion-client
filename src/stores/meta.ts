@@ -1,14 +1,14 @@
 import { IMeta } from './../interfaces/meta';
 import { Meta } from '@/views/Meta.vue';
-import { useMeta } from './meta';
-import { deleteMeta, getAllMetas, registerMeta, updateMeta, getSingleMeta } from '@/services/meta';
+import { deleteMeta, getAllMetas, registerMeta, updateMeta, getSingleMeta, getAporteMensal } from '@/services/meta';
 import { reactive } from 'vue';
-import { IMeta } from '@/interfaces/meta';
+import { IAporte } from '@/interfaces/aporte';
 
 // store de meta
 export const useMeta = reactive({
   metas: [] as IMeta[],
   meta: undefined as IMeta | undefined,
+  aporte: undefined as IAporte | undefined,
   page: 0,
   totalPages: 0,
 });
@@ -83,4 +83,14 @@ export async function deleteLocalMeta(id: number, metaData: object) {
 
 export function changePage(page: number) {
   useMeta.page = page;
+}
+
+export async function getLocalMetaAporte(id: number) {
+  try {
+    const { data } = await getAporteMensal(id);
+
+    useMeta.aporte = data;
+  } catch (error) {
+    console.log(error);
+  }
 }

@@ -12,6 +12,8 @@ import AprendaMais from '@/views/AprendaMais.vue';
 import Relatorio from '@/views/Relatorio.vue'
 import Meta from '@/views/Meta/Meta.vue'
 import MetaCadastro from '@/views/Meta/MetaCadastro.vue'
+import MetaEditar from '@/views/Meta/MetaEditar.vue'
+import MetaDetalhes from '@/views/Meta/MetaDetalhes.vue'
 import { getLocalUser, useUser } from '@/stores/user';
 import { useOperation } from '@/stores/operation';
 import { useInvestment } from '@/stores/investment';
@@ -85,7 +87,12 @@ const routes = [
   {
     path: '/metas/editar/:id',
     name: 'EditarMeta',
-    component: MetaCadastro,
+    component: MetaEditar,
+  },
+  {
+    path: '/metas/detalhes/:id',
+    name: 'DetalhesMeta',
+    component: MetaDetalhes,
   },
 ];
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MetaCadastro from '@/components/Meta/Form.vue'
+import MetaDetalhes from '@/components/Meta/Details.vue'
 import Layout from '@/components/Layout.vue';
 
 </script>
@@ -7,7 +7,7 @@ import Layout from '@/components/Layout.vue';
 <template>
     <Layout sidebar>
         <section>
-            <MetaCadastro></MetaCadastro>
+            <MetaDetalhes></MetaDetalhes>
         </section>
     </Layout>
 </template>

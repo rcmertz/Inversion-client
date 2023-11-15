@@ -14,14 +14,21 @@
     modal.value = false;
     router.push('/metas');
   }
+
+  async function openEdit(id: number){
+    router.push('/metas/editar/' + id)
+  }
 </script>
 
 <template>
   <div class="link-container">
-    <RouterLink :to="'/metas/editar/' + item.id" class="nav-link" active-class="nav-link active">
-      <Icon icon="ooui:user-avatar" class="link-icon" />
+    <RouterLink :to="'/metas/detalhes/' + item.id" class="nav-link" active-class="nav-link active">
+      <Icon icon="ooui:flag-ltr" class="link-icon" />
       <p>{{ item.descricaoMeta }}</p>
     </RouterLink>
+    <button type="button" @click="openEdit(item.id)" class="pencil-btn">
+      <Icon icon="fa6-solid:pencil" class="trash-icon" />
+    </button>
     <button type="button" @click="modal = true" class="trash-btn">
       <Icon icon="fa6-solid:trash-can" class="trash-icon" />
     </button>
@@ -88,7 +95,21 @@
     z-index: 2;
   }
 
-  .trash-btn:hover .trash-icon {
+  .pencil-btn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    right: 70px;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+
+  .trash-btn:hover .trash-icon{
+    color: #fff;
+  }
+
+  .pencil-btn:hover{
     color: #fff;
   }
 
@@ -145,4 +166,5 @@
   .action-btn:first-child {
     background-color: #ff0000;
   }
+  
 </style>
