@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { getLocalReports, useReports } from '@/stores/reports';
+import { onMounted, computed } from 'vue';
+
+// filtra relatorios ativas
+const Reports = computed(() => {
+    return useReports.reports.filter((item) => item.ativo);
+});
+
+// pega carteiras quando o componente renderizar
+onMounted(() => {
+    getLocalReports();
+});
+</script>
+
+
 <template>
     <div>
         <div
@@ -12,42 +28,19 @@
                 <th>Número</th>
                 <th>Carteira</th>
                 <th>Quantidade</th>
-                <th>Operação</th>
+                <th>Tipo</th>
                 <th>Data</th>
                 <th>Valor</th>
             </tr>
-            <tr>
-                <td>1 - 10</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$50</td>
+            <tr v-for="item in Reports">
+                <td>{{ item.id }}</td>
+                <td>{{ item.investimento.carteira.id }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>{{ item.tipo }}</td>
+                <td>{{ item.data }}</td>
+                <td>{{ item.valor * item.quantidade }},00 R$</td>
             </tr>
-            <tr>
-                <td>1 - 10</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$50</td>
-            </tr>
-            <tr>
-                <td>1 - 10</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$50</td>
-            </tr>
-            <tr>
-                <td>1 - 10</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$250</td>
-                <td>$50</td>
-            </tr>
+
         </table>
     </div>
 </template>
