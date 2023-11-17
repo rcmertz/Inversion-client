@@ -100,7 +100,7 @@
       }"
     />
   </div>
-  <div class="container" v-if="isMeta">
+  <div class="container" v-else>
     <Bar
       :data="{
         labels: [''],

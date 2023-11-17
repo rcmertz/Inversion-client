@@ -250,10 +250,9 @@
   .buttons {
     display: flex;
     align-items: center;
-    place-self: flex-end;
-    grid-column: 1 / -1;
-
     gap: 40px;
+    grid-column: span 3 / span 3;
+    place-self: flex-end;
   }
 
   .buttons > * {
@@ -273,6 +272,27 @@
   @media (max-width: 1400px) {
     form {
       grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 750px) {
+    .buttons {
+      flex-direction: column;
+      width: 100%;
+      padding-top: 0px;
+    }
+
+    .buttons > * {
+      width: 100%;
+      display: grid;
+      place-items: center;
     }
   }
 </style>

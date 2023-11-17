@@ -9,11 +9,12 @@ import Rendimento from '@/views/Operacao/Rendimento.vue';
 import EditarOperacao from '@/views/Operacao/EditarOperacao.vue';
 import EditarRendimento from '@/views/Operacao/EditarRendimento.vue';
 import AprendaMais from '@/views/AprendaMais.vue';
-import Relatorio from '@/views/Relatorio.vue'
-import Meta from '@/views/Meta/Meta.vue'
-import MetaCadastro from '@/views/Meta/MetaCadastro.vue'
-import MetaEditar from '@/views/Meta/MetaEditar.vue'
-import MetaDetalhes from '@/views/Meta/MetaDetalhes.vue'
+import Relatorio from '@/views/Relatorio.vue';
+import Meta from '@/views/Meta/Meta.vue';
+import MetaCadastro from '@/views/Meta/MetaCadastro.vue';
+import MetaEditar from '@/views/Meta/MetaEditar.vue';
+import MetaDetalhes from '@/views/Meta/MetaDetalhes.vue';
+import Simulacao from '@/views/Simulacao/Simulacao.vue';
 import { getLocalUser, useUser } from '@/stores/user';
 import { useOperation } from '@/stores/operation';
 import { useInvestment } from '@/stores/investment';
@@ -93,6 +94,11 @@ const routes = [
     path: '/metas/detalhes/:id',
     name: 'DetalhesMeta',
     component: MetaDetalhes,
+  },
+  {
+    path: '/simulacao',
+    name: 'SimulacaoDeInvestimento',
+    component: Simulacao,
   },
 ];
 

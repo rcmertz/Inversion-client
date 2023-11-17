@@ -76,7 +76,7 @@
 
   const route = useRoute();
 
-  // pega operação e investimentos quando o componente renderizar e 
+  // pega operação e investimentos quando o componente renderizar e
   // atualiza dos valores a serem enviados ao backend
   onMounted(async () => {
     await getLocalOperation(Number(route.params.id));
@@ -202,8 +202,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    grid-column: span 1 / span 1;
     position: relative;
+    min-width: 0px;
   }
 
   label {
@@ -269,9 +269,9 @@
   .buttons {
     display: flex;
     align-items: center;
-    place-self: flex-end;
-    grid-column: span 2 / span 2;
     gap: 40px;
+    grid-column: span 3 / span 3;
+    place-self: flex-end;
   }
 
   .buttons > * {
@@ -290,10 +290,6 @@
 
   .buttons :nth-child(1) {
     background-color: var(--dashboard-status-loss);
-  }
-
-  .form-row:nth-child(2) > .custom-select {
-    width: 452px;
   }
 
   .modal-btn {
@@ -318,6 +314,27 @@
   @media (max-width: 1400px) {
     form {
       grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 1400px) {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 750px) {
+    .buttons {
+      flex-direction: column;
+      width: 100%;
+      padding-top: 0px;
+    }
+
+    .buttons > * {
+      width: 100%;
+      display: grid;
+      place-items: center;
     }
   }
 </style>
