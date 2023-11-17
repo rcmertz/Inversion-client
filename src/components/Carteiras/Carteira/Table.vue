@@ -65,7 +65,7 @@
   async function handleDeletion(id: number, item: IOperation) {
     const message = confirm('Tem certeza que deseja remover essa operação?');
     if (message) {
-      await deleteLocalOperation(id, { ...item, ativo: false });
+      await deleteLocalOperation(id, { ...item, ativo: false, investimento:{id: item.investimento.id, ativo: true} });
       router.go(0);
     }
   }
