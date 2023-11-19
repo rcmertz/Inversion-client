@@ -9,10 +9,10 @@ export const useReports = reactive({
 });
 
 // pegar os relatorios e salvar resposta na store
-export async function getLocalReports() {
+export async function getLocalReports(dataDe?: string, dataAte?: string) {
     try {
-        const { data } = await getAllReports();
-        // console.log(data);
+        const { data } = await getAllReports(dataDe, dataAte);
+        console.log(data);
         useReports.reports = data.content;
     } catch (error) {
         console.log(error);
