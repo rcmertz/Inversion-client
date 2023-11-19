@@ -97,6 +97,36 @@
       }"
     />
   </div>
+<<<<<<< HEAD
+=======
+  <div class="container" v-else>
+    <Bar
+      :data="{
+        labels: [''],
+        datasets: [
+          {
+            data: [props.valorRealizado ?? 0], 
+            backgroundColor: '#00ff7f',
+            label: 'Valor Realizado',
+          },
+          {
+            data: [props.valorMeta ?? 0],
+            backgroundColor: '#62d0ff',
+            label: 'Valor da Meta',
+          },
+        ],
+      }"
+      :options="{
+        responsive: true,
+        maintainAspectRatio: false,
+      }"
+    />
+    <div style="display: flex; justify-content: space-around; font-size: 15px;">
+      <p>Carteira</p>
+      <p>Meta</p>
+    </div>
+  </div>
+>>>>>>> c56624377d8da6e996bb89c8129f91a569e63e6d
 </template>
 
 <style scoped>
