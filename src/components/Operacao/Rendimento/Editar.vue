@@ -145,7 +145,7 @@
             :value="item!.id"
           >
             {{ item!.investimento.nomeInvestimento }} - {{ formatDate(item!.data) }} -
-            {{ item!.tipo }}
+            {{ item!.tipo }} - {{ formatCurrency(item.valor) }}
           </option>
           <option disabled value="0" v-else>0 investimentos cadastrados</option>
         </select>
@@ -360,6 +360,35 @@
   @media (max-width: 1400px) {
     form {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    header {
+      grid-column: span 2 / span 2;
+    }
+
+    .buttons {
+      grid-column: span 2 / span 2;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 750px) {
+    .buttons {
+      flex-direction: column;
+      width: 100%;
+      padding-top: 0px;
+    }
+
+    .buttons > * {
+      width: 100%;
+      display: grid;
+      place-items: center;
     }
   }
 

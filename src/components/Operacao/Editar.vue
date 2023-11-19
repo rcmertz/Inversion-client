@@ -61,6 +61,7 @@
       investimento: {
         ...form.value.investimento,
         id: selectedInvestment.value?.id,
+        ativo: true,
       },
     };
 
@@ -154,6 +155,32 @@
         placeholder="dd/mm/aaaa"
         required
         v-model="form.data"
+      />
+    </div>
+
+    <!-- Valor Investimento -->
+    <div class="form-row" v-if="selectedInvestment">
+      <label for="valorInvestimento">Valor Investimento</label>
+      <input
+        type="text"
+        name="valorInvestimento"
+        id="valorInvestimento"
+        readonly
+        required
+        :value="formatCurrency(selectedInvestment.valorInvestimento ?? 0)"
+      />
+    </div>
+
+    <!-- Saldo -->
+    <div class="form-row" v-if="selectedInvestment">
+      <label for="saldo">Saldo</label>
+      <input
+        type="text"
+        name="saldo"
+        id="saldo"
+        readonly
+        required
+        :value="selectedInvestment.saldo ?? 0"
       />
     </div>
 
@@ -314,6 +341,35 @@
   @media (max-width: 1400px) {
     form {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    header {
+      grid-column: span 2 / span 2;
+    }
+
+    .buttons {
+      grid-column: span 2 / span 2;
+    }
+  }
+
+  @media (max-width: 1400px) {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 750px) {
+    .buttons {
+      flex-direction: column;
+      width: 100%;
+      padding-top: 0px;
+    }
+
+    .buttons > * {
+      width: 100%;
+      display: grid;
+      place-items: center;
     }
   }
 
