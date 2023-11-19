@@ -35,4 +35,10 @@ export const sidebar = [
     name: 'Metas',
     route: '/metas',
   },
+  {
+    id: '8',
+    icon: 'iconoir:money-square',
+    name: 'Simulação de Investimento',
+    route: '/simulacao',
+  },
 ];

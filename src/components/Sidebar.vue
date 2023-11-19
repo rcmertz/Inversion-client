@@ -38,7 +38,7 @@ async function handleLogout() {
         </RouterLink>
       </div>
     </div>
-    <button type="button" class="logout" @click="handleLogout" style="margin-top: 15%">
+    <button type="button" class="logout" @click="handleLogout" style="margin-top: 50px">
       <Icon icon="material-symbols:logout-rounded" class="icon logout-icon" />
     </button>
   </aside>
@@ -48,7 +48,7 @@ async function handleLogout() {
 .sidebar {
   background-color: var(--sidebar);
   height: 100vh;
-  width: 102px;
+  width: 120px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

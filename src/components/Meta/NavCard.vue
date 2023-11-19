@@ -10,13 +10,17 @@
   const modal = ref(false);
 
   async function handleDeletion() {
-    await deleteLocalMeta(props.item.id, { ...props.item, ativo: false });
+    await deleteLocalMeta(props.item.id, {
+      ...props.item,
+      ativo: false,
+      carteira: { id: props.item.carteira.id, ativo: true },
+    });
     modal.value = false;
     router.push('/metas');
   }
 
-  async function openEdit(id: number){
-    router.push('/metas/editar/' + id)
+  async function openEdit(id: number) {
+    router.push('/metas/editar/' + id);
   }
 </script>
 
@@ -50,18 +54,20 @@
   }
 
   .nav-link {
-    width: 289px;
-    min-width: max-content;
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 42px 30px;
+    padding: 42px 100px 42px 30px;
     color: unset;
     text-decoration: none;
     background-color: var(--primary-alt);
     border-radius: 5px;
     transition: all 0.3s;
     z-index: 1;
+  }
+
+  .nav-link p {
+    width: max-content;
   }
 
   .nav-link:hover {
@@ -105,11 +111,11 @@
     z-index: 2;
   }
 
-  .trash-btn:hover .trash-icon{
+  .trash-btn:hover .trash-icon {
     color: #fff;
   }
 
-  .pencil-btn:hover{
+  .pencil-btn:hover {
     color: #fff;
   }
 
@@ -166,5 +172,4 @@
   .action-btn:first-child {
     background-color: #ff0000;
   }
-  
 </style>

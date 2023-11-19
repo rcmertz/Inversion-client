@@ -47,6 +47,7 @@
     overflow-x: auto;
     gap: 72px;
     margin-bottom: 56px;
+    padding-bottom: 24px;
   }
 
   .line {

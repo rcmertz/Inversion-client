@@ -13,5 +13,6 @@ export interface IInvestment {
   carteira: IWallet;
   rendimentos: IIncome[];
   operacoes: IOperation[];
+  saldo: number;
   data: string;
 }

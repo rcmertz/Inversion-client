@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import MetaDetalhes from '@/components/Meta/Details.vue';
   import Layout from '@/components/Layout.vue';
+  import Form from '@/components/Simulacao/Form.vue';
 </script>
 
 <template>
   <Layout sidebar>
     <section>
-      <MetaDetalhes />
+      <Form />
     </section>
   </Layout>
 </template>
