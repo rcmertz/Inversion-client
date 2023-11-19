@@ -3,7 +3,7 @@
   import { registerLocalMeta } from '@/stores/meta';
   import { computed, onMounted, reactive } from 'vue';
   import { getLocalWallets, useWallet } from '@/stores/wallet';
-  import { router } from '@/routes/routes';
+  import { formatCurrency } from '@/utils/formatCurrency';
 
   // valores enviados ao backend
   const form = reactive({
@@ -23,9 +23,25 @@
     return useWallet.wallets?.filter((item) => item.ativo);
   });
 
+  const selectedWallet = computed(() => {
+    return wallets.value.find((item) => item.id === form.carteira.id);
+  });
+
+  const selectedWalletDate = computed(() => {
+    const date = new Date(selectedWallet.value?.cadastro as string);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+
+    return `${year}-${month + 1}-${day}`;
+  });
+
   async function handleSubmit() {
-    await registerLocalMeta({ ...form, descricaoMeta: form.descricaoMeta.toUpperCase() });
-    router.push('/metas');
+    await registerLocalMeta({
+      ...form,
+      descricaoMeta: form.descricaoMeta.toUpperCase(),
+    });
+    // router.push('/metas');
   }
 
   // pega investimentos quando o componente renderizar
@@ -82,13 +98,15 @@
 
     <!-- Rentabilidade -->
     <div class="form-row">
-      <label for="rentabilidade">Rentabilidade</label>
+      <label for="rentabilidade">Rentabilidade (%)</label>
       <input
         type="text"
         name="rentabilidade"
         id="rentabilidade"
         required
-        v-model="form.rentabilidade"
+        step="0.01"
+        placeholder="10%"
+        v-model.number="form.rentabilidade"
       />
     </div>
     <!-- Carteira -->
@@ -103,6 +121,20 @@
           <option v-else disabled value="0">0 carteiras cadastradas</option>
         </select>
       </div>
+    </div>
+    <!-- Valor carteira -->
+    <div class="form-row" v-if="selectedWallet">
+      <label for="valorCarteira">Valor Carteira</label>
+      <input
+        type="text"
+        name="valorCarteira"
+        :value="formatCurrency(selectedWallet.valorCarteira)"
+        readonly
+      />
+    </div>
+    <div class="form-row" v-if="selectedWallet">
+      <label for="dataCarteira">Data da Carteira</label>
+      <input type="date" name="dataCarteira" :value="selectedWalletDate" readonly />
     </div>
 
     <div class="buttons">
@@ -123,7 +155,7 @@
 
   header {
     margin-bottom: 20px;
-    grid-column: 1 / -1;
+    grid-column: span 3 / span 3;
   }
 
   .form-row {
@@ -186,7 +218,7 @@
 
   .currency {
     position: absolute;
-    top: 54%;
+    top: 51.5%;
     left: 24px;
     font-size: 24px;
     font-family: var(--montserrat);
@@ -237,7 +269,16 @@
 
   @media (max-width: 1400px) {
     form {
+      display: grid;
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    header {
+      grid-column: span 2 / span 2;
+    }
+
+    .buttons {
+      grid-column: span 2 / span 2;
     }
   }
 

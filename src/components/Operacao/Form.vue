@@ -197,6 +197,32 @@
       </div>
     </div>
 
+    <!-- Valor Investimento -->
+    <div class="form-row" v-if="selectedInvestment">
+      <label for="valorInvestimento">Valor Investimento</label>
+      <input
+        type="text"
+        name="valorInvestimento"
+        id="valorInvestimento"
+        readonly
+        required
+        :value="formatCurrency(selectedInvestment.valorInvestimento ?? 0)"
+      />
+    </div>
+
+    <!-- Saldo -->
+    <div class="form-row" v-if="selectedInvestment">
+      <label for="saldo">Saldo</label>
+      <input
+        type="text"
+        name="saldo"
+        id="saldo"
+        readonly
+        required
+        :value="selectedInvestment.saldo ?? 0"
+      />
+    </div>
+
     <!-- Carteira -->
     <div class="form-row">
       <label for="carteira">Carteira</label>
@@ -349,6 +375,14 @@
   @media (max-width: 1400px) {
     form {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    header {
+      grid-column: span 2 / span 2;
+    }
+
+    .buttons {
+      grid-column: span 2 / span 2;
     }
   }
 

@@ -62,10 +62,10 @@
   }
 
   // desativa operação
-  async function handleDeletion(id: number, item: IOperation) {
+  async function handleDeletion(item: IOperation) {
     const message = confirm('Tem certeza que deseja remover essa operação?');
     if (message) {
-      await deleteLocalOperation(id, { ...item, ativo: false, investimento:{id: item.investimento.id, ativo: true} });
+      await deleteLocalOperation(item.id, { ...item, ativo: false, investimento: { id: item.investimento.id, ativo: true }  });
       router.go(0);
     }
   }
@@ -75,7 +75,7 @@
   <div class="container">
     <table>
       <tr class="table-head">
-        <th v-for="item in tableHead" :key="item.id">
+        <th v-for="(item, index) in tableHead" :key="index">
           {{ item.title }}
         </th>
         <th>Ações</th>
@@ -83,6 +83,9 @@
       <tr v-for="item in operations" :key="item.id" class="table-rows">
         <td class="table-name">
           {{ item.investimento.nomeInvestimento }}
+        </td>
+        <td class="table-value">
+          {{ formatCurrency(item.investimento.valorInvestimento) }}
         </td>
         <td class="table-operation">
           {{ item.tipo }}
@@ -112,7 +115,7 @@
           <button
             type="button"
             class="action-btn delete-btn"
-            @click="handleDeletion(item.id, { ...item, ativo: false })"
+            @click="handleDeletion(item)"
           >
             <Icon icon="fa6-solid:trash-can" class="action-icon delete-icon" />
           </button>

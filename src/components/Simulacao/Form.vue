@@ -300,6 +300,14 @@
     form {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    header {
+      grid-column: span 2 / span 2;
+    }
+
+    .buttons {
+      grid-column: span 2 / span 2;
+    }
   }
 
   @media (max-width: 1100px) {

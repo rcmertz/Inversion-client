@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import MetaDetalhes from '@/components/Meta/Details.vue'
-import Layout from '@/components/Layout.vue';
-
+  import MetaDetalhes from '@/components/Meta/Details.vue';
+  import Layout from '@/components/Layout.vue';
 </script>
 
 <template>
-    <Layout sidebar>
-        <section>
-            <MetaDetalhes></MetaDetalhes>
-        </section>
-    </Layout>
+  <Layout sidebar>
+    <section>
+      <MetaDetalhes />
+    </section>
+  </Layout>
 </template>
 
 <style scoped>
@@ -17,5 +16,3 @@ import Layout from '@/components/Layout.vue';
     padding: 52px;
   }
 </style>
-  
-  
