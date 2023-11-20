@@ -14,7 +14,7 @@ import Meta from '@/views/Meta/Meta.vue';
 import MetaCadastro from '@/views/Meta/MetaCadastro.vue';
 import MetaEditar from '@/views/Meta/MetaEditar.vue';
 import MetaDetalhes from '@/views/Meta/MetaDetalhes.vue';
-import Simulacao from '@/views/Simulacao/Simulacao.vue';
+import Simulacao from '@/views/Simulacao.vue';
 import { getLocalUser, useUser } from '@/stores/user';
 import { useOperation } from '@/stores/operation';
 import { useInvestment } from '@/stores/investment';

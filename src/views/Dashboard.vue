@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Chart from '@/components/Dashboard/Chart.vue';
+  import Charts from '@/components/Dashboard/Charts.vue';
   import DashboardHeader from '@/components/Dashboard/Header.vue';
   import StatusCard from '@/components/Dashboard/StatusCard.vue';
   import Layout from '@/components/Layout.vue';
@@ -7,11 +7,9 @@
   import { getLocalOperations, useOperation } from '@/stores/operation';
   import { computed, onMounted } from 'vue';
 
-
   const incomes = computed(() => {
     return useIncome.incomes.filter((item) => item.ativo && item.operacao.ativo);
   });
-
 
   const totalIncome = computed(() => {
     return incomes.value.reduce((acc, curr) => {
@@ -19,18 +17,15 @@
     }, 0);
   });
 
-
   const operations = computed(() => {
     return useOperation.operations.filter((item) => item.ativo && item.investimento.ativo);
   });
-
 
   const totalOperations = computed(() => {
     return operations.value.reduce((acc, curr) => {
       return acc + curr.valor * curr.quantidade;
     }, 0);
   });
-
 
   onMounted(() => {
     getLocalOperations();
@@ -56,13 +51,7 @@
           :total="totalOperations + totalIncome"
         />
       </ul>
-      <Chart
-        :operations="operations"
-        :incomes="incomes"
-        :total-incomes="totalIncome"
-        :total="totalOperations + totalIncome"
-        :is-meta="false"
-      />
+      <Charts :operations="operations" :incomes="incomes" />
     </section>
   </Layout>
 </template>

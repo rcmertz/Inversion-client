@@ -6,6 +6,7 @@
   import { computed, onMounted, reactive } from 'vue';
   import { getLocalInvestments } from '@/stores/investment';
   import { formatCurrency } from '@/utils/formatCurrency';
+  import { useRouter } from 'vue-router';
 
   // valores enviados ao backend
   const form = reactive({
@@ -91,10 +92,12 @@
     return operationShops.value - operationSales.value;
   });
 
+  const router = useRouter();
+
   async function handleSubmit() {
     const formData = {
       ...form,
-      investimento: { ...form.investimento, id: selectedInvestment.value?.id },
+      investimento: { ...form.investimento, id: selectedInvestment.value!.id },
     };
 
     // se for operação de venda
@@ -105,12 +108,14 @@
         alert('Não é possível cadastrar uma venda com maior quantidade de compras que você tem.');
       } else {
         await registerLocalOperation(formData);
+        router.go(0);
       }
       // se não tiver investimento selecionado estoura um erro
     } else if (form.investimento.id === 0) {
       alert('Por favor, selecione um investimento.');
     } else {
       await registerLocalOperation(formData);
+      router.go(0);
     }
   }
 
@@ -146,7 +151,7 @@
         type="number"
         name="quantidade"
         id="quantidade"
-        min="0"
+        min="1"
         required
         v-model="form.quantidade"
       />
