@@ -3,11 +3,23 @@ import { getLocalReports, useReports } from '@/stores/reports';
 import { onMounted, computed, ref, watch } from 'vue';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDate } from '@/utils/formatDate';
+import html2pdf from 'html2pdf.js';
+
 
 // filtra relatorios ativas
 const Reports = computed(() => {
     return useReports.reports.filter((item) => item.ativo);
 });
+
+function generatePDF() {
+    const element = document.getElementById('relatorios-table');
+    if (element) {
+        html2pdf().from(element).save();
+    } else {
+        console.error('Elemento da tabela não encontrado');
+    }
+}
+
 
 const dataDe = ref('2021-06-27T23:55:10.030');
 const dataAte = ref('2024-06-27T23:55:10.030');
@@ -33,7 +45,6 @@ onMounted(() => {
 </script>
 
 
-
 <template>
     <div>
         <div
@@ -48,7 +59,7 @@ onMounted(() => {
             style="float: right;margin-right: 10%;background: white;border-radius: 5px; padding: 3px; margin-top: 5px;"
             @click="reset_datas">Limpar</button>
 
-        <table class="rwd-table" style="margin-top: 3%; border-radius: 7px">
+        <table id="relatorios-table" class="rwd-table" style="margin-top: 4%; border-radius: 7px">
             <tr>
                 <th>Carteira</th>
                 <th>Investimento</th>
@@ -73,7 +84,7 @@ onMounted(() => {
             </tr>
         </table>
 
-        <button type="button"
+        <button class="imprimir" type="button" @click="generatePDF"
             style="float: right;margin-right: 10%;background: orange;border-radius: 5px; padding: 8px;">Imprimir</button>
 
     </div>
@@ -81,6 +92,17 @@ onMounted(() => {
   
 
 <style scoped>
+.imprimir {
+    cursor: pointer;
+}
+
+.imprimir:hover {
+    color: white;
+    background: rgb(183, 81, 9) !important;
+    font-size: 14px;
+    transition: 0.5s;
+}
+
 .rwd-table {
     background: #eeeeee;
     border-collapse: collapse;
