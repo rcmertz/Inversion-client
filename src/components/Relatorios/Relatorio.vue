@@ -48,11 +48,11 @@ onMounted(() => {
 <template>
     <div>
         <div
-            style="background:white; border-radius:7px; width: 40%; display: flex; padding: 2px; margin-top: 7%; margin-left:50%">
+            style="background:white; border-radius:7px; width: 30%; display: flex; padding: 2px; margin-top: 7%; margin-left:60%">
             <h4>&nbspFiltrar de: &nbsp</h4>
-            <input type="datetime-local" v-model="dataDe" />
+            <input type="datetime-local" v-model="dataDe" style="width: 26%;" />
             <h4>, até: &nbsp</h4>
-            <input type="datetime-local" v-model="dataAte" />
+            <input type="datetime-local" style="width: 26%;" v-model="dataAte" />
 
         </div>
         <button type="button"
