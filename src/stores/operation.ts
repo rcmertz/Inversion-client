@@ -42,8 +42,8 @@ export async function registerLocalOperation(operationData: object) {
 
     alert('Operação cadastrada com sucesso!');
   } catch (error: any) {
-    console.log(error);
-    console.log(error.response.data.erro);
+    // alert(error);
+    alert(error.response.data.erro);
   }
 }
 
@@ -184,7 +184,8 @@ export async function updateLocalOperation(id: number, operationData: object) {
 
     alert('Operação atualizada com sucesso!');
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    alert(error.response.data.erro);
   }
 }
 
@@ -197,6 +198,7 @@ export async function deleteLocalOperation(id: number, operationData: object) {
       return item.id !== id;
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    alert(error.response.data.erro);
   }
 }

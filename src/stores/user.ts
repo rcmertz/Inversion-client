@@ -23,12 +23,13 @@ export async function localRegister(userData: object) {
 
     alert('Usuário cadastrado com sucesso. Obrigado pela preferência!');
     router.push('/');
-  } catch (error: any) {
-    alert(
-      error.response.status === 400
-        ? 'CPF ou Email já cadastrados, tente novamente.'
-        : 'Ocorreu algum erro, tente novamente mais tarde.'
-    );
+  } catch (error) {
+    alert(error.response.data.erro);
+    // alert(
+    //   error.response.status === 400
+    //     ? 'CPF ou Email já cadastrados, tente novamente.'
+    //     : 'Ocorreu algum erro, tente novamente mais tarde.'
+    // );
   }
 }
 
