@@ -85,6 +85,7 @@ export async function deleteLocalMeta(id: number, metaData: object) {
     alert('Meta desativada com sucesso!');
   } catch (error) {
     console.log(error);
+    alert(error.response.data.erro);
   }
 }
 

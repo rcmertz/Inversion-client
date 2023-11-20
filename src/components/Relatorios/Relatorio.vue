@@ -2,6 +2,7 @@
 import { getLocalReports, useReports } from '@/stores/reports';
 import { onMounted, computed, ref, watch } from 'vue';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { formatDate } from '@/utils/formatDate';
 
 // filtra relatorios ativas
 const Reports = computed(() => {
@@ -49,27 +50,25 @@ onMounted(() => {
 
         <table class="rwd-table" style="margin-top: 3%; border-radius: 7px">
             <tr>
-                <th>Id </th>
                 <th>Carteira</th>
                 <th>Investimento</th>
                 <th>Valor do Investimento</th>
-                <!-- <th>Saldo</th> -->
+                <th>Saldo</th>
                 <th>Quantidade</th>
                 <th>Preço Médio</th>
                 <th>Tipo</th>
                 <th>Data</th>
-                <th>Valor</th>
+                <th>Valor da Operação</th>
             </tr>
             <tr v-for="item in Reports" :key="item.id">
-                <td>{{ item.investimento.carteira.id }}</td>
                 <td>{{ item.investimento.carteira.descricaoCarteira }}</td>
                 <td>{{ item.investimento.nomeInvestimento }}</td>
-                <td>{{ item.investimento.valorInvestimento }}</td>
-                <!-- <td>{{ item.investimento.saldo }}</td> -->
+                <td>{{ formatCurrency(item.investimento.valorInvestimento) }}</td>
+                <td>{{ item.investimento.saldo }}</td>
                 <td>{{ item.quantidade }}</td>
                 <td>{{ formatCurrency(item.preco_medio) }}</td>
                 <td>{{ item.tipo }}</td>
-                <td>{{ new Date(item.data).toLocaleDateString('pt-BR') }}</td>
+                <td>{{ formatDate(item.data) }}</td>
                 <td>{{ formatCurrency(item.valor * item.quantidade) }}</td>
             </tr>
         </table>
