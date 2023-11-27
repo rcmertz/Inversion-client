@@ -2,6 +2,7 @@ import { IWallet } from '@/interfaces/wallet';
 import { deleteWallet, getAllWallets, registerWallet, updateWallet } from '@/services/wallet';
 import { reactive } from 'vue';
 import { deleteLocalInvestment, useInvestment } from './investment';
+import { deleteLocalOperation, useOperation } from './operation';
 
 // store de carteira
 export const useWallet = reactive({
@@ -63,6 +64,12 @@ export async function deleteLocalWallet(id: number, walletData: object) {
     useInvestment.investments.forEach(async (item) => {
       if (item.carteira.id === id) {
         await deleteLocalInvestment(item.id, { ...item, ativo: false });
+      }
+    });
+
+    useOperation.operations.forEach(async (item) => {
+      if (item.investimento.id === id) {
+        await deleteLocalOperation(item.id, { ...item, ativo: false });
       }
     });
 
